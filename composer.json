@@ -1,8 +1,8 @@
 {
-    "name": "lasallecms/lasallecmsapi",
-    "description": "The internal API for the LaSalle Content System.",
+    "name": "lasallecms/lasallecmsfrontend",
+    "description": "Front-end package for the LaSalle Content Management System.",
     "homepage": "http://lasallecms.com",
-    "keywords": ["laravel", "laravel5", "apit", "LaSalleCMS", "South LaSalle", "Bob Bloom"],
+  "keywords": ["front", "front-end", "LaSalleCMS", "South LaSalle", "Bob Bloom", "laravel", "laravel5"],
     "license":"GPL-3.0",
     "type": "library",
     "authors": [
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lasallecms\\Lasallecmsapi\\": "src/"
+            "Lasallecms\\Lasallecmsfrontend\\": "src/"
         }
     },
     "minimum-stability": "dev"
