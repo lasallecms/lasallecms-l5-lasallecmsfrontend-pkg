@@ -6,7 +6,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/lasallecms/lasallecmsfrontend/v/unstable.svg)](https://packagist.org/packages/lasallecms/lasallecmsfrontend)
 [![GitHub Issues](https://img.shields.io/github/issues/lasallecms/lasallecms-l5-lasallecmsfrontend-pkg.svg)](https://github.com/lasallecms/lasallecms-l5-lasallecmsfrontend-pkg/issues)
 [![Software License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Laravel](https://img.shields.io/badge/Laravel-v5-brightgreen.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-v5.1-brightgreen.svg?style=flat-square)](http://laravel.com)
 
 Internal API package specifically for my LaSalle Content Management System. 
 
