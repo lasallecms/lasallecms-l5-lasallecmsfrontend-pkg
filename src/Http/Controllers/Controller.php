@@ -1,5 +1,7 @@
 <?php
 
+namespace Lasallecms\Lasallecmsfrontend\Http\Controllers;
+
 /**
  *
  * Front-end package for the LaSalle Content Management System, based on the Laravel 5 Framework
@@ -29,19 +31,15 @@
  *
  */
 
-/**
- * ------------------------------------------
- *  Site Routes
- *  ------------------------------------------
- */
+
+// Base controller from https://github.com/laravel/laravel/blob/master/app/Http/Controllers/Controller.php
 
 
-// single post by slug, or category listing (by title)
-$router->get('{slug}', 'TriageController@triage');
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
-// Home
-$router->get('/', [
-   'as'   => 'home',
-   'uses' => 'TriageController@home',
-
-]);
+abstract class Controller extends BaseController
+{
+    use DispatchesJobs, ValidatesRequests;
+}

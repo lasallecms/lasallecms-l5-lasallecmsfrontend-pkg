@@ -61,7 +61,7 @@ class LasallecmsfrontendServiceProvider extends ServiceProvider {
 
         //$this->setupTranslations();
 
-        $this->setupViews();
+        //$this->setupViews();
     }
 
     /**
@@ -71,10 +71,10 @@ class LasallecmsfrontendServiceProvider extends ServiceProvider {
      */
     protected function setupConfiguration()
     {
-        $configuration = realpath(__DIR__.'/../config/Lasallecmsfrontend.php');
+        $configuration = realpath(__DIR__.'/../config/lasallecmsfrontend.php');
 
         $this->publishes([
-            $configuration => config_path('Lasallecmsfrontend.php'),
+            $configuration => config_path('lasallecmsfrontend.php'),
         ]);
     }
 
@@ -111,7 +111,7 @@ class LasallecmsfrontendServiceProvider extends ServiceProvider {
      */
     public function setupRoutes(Router $router)
     {
-        $router->group(['namespace' => 'Lasallecms\lasallecmsfrontend\Http\Controllers'], function($router)
+        $router->group(['namespace' => 'Lasallecms\Lasallecmsfrontend\Http\Controllers'], function($router)
         {
             require __DIR__.'/Http/routes.php';
         });
