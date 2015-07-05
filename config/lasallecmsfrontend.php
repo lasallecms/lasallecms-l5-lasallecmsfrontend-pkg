@@ -166,4 +166,35 @@ return [
     'pages_not_using_database' => [
         'Home', 'Team',
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Images path
+    |--------------------------------------------------------------------------
+    |
+    | What is the full path of your images folder, exclusing your "public" folder?
+    |
+    | Eg: "assets/images" = public/assets/images
+    |
+    */
+    'images_folder' => 'images',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image sizes
+    |--------------------------------------------------------------------------
+    |
+    |
+    |
+    |
+    |
+    */
+    'image_sizes' => [
+        'heading_background'     => '-1900x1200',
+        'section_background'     => '-1900x1200',
+        'posts_summary_display'  => '150x150',
+        'posts_detailed_display' => '-300x300',
+    ],
 ];
