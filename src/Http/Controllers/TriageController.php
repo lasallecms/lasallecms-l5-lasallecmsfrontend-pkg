@@ -70,6 +70,7 @@ use Lasallecms\Lasallecmsfrontend\Processing\CategoryProcessing;
 use Lasallecms\Lasallecmsfrontend\Processing\PostProcessing;
 use Lasallecms\Helpers\Dates\DatesHelper;
 use Lasallecms\Helpers\HTML\HTMLHelper;
+use Lasallecms\Helpers\Images\ImagesHelper;
 
 // Laravel facades
 use Illuminate\Support\Facades\DB;
@@ -114,6 +115,12 @@ class TriageController extends Controller
      */
     protected $nameOfGenericBladeFile = 'generic_pages.blade.php';
 
+    /**
+     * @var Lasallecms\Helpers\Images\ImagesHelper
+     */
+    protected $imagesHelper;
+
+
 
     /**
      * @param CategoryProcessing $categoryProcessing
@@ -123,15 +130,17 @@ class TriageController extends Controller
     public function __construct(
         CategoryProcessing $categoryProcessing,
         PostProcessing $postProcessing,
-        Filesystem $files
+        Filesystem $files,
+        ImagesHelper $imagesHelper
     ) {
         $this->middleware('auth');
 
         // TODO: FRONTEND MIDDLEWARE!
 
         $this->categoryProcessing = $categoryProcessing;
-        $this->postProcessing = $postProcessing;
-        $this->files = $files;
+        $this->postProcessing     = $postProcessing;
+        $this->files              = $files;
+        $this->imagesHelper       = $imagesHelper;
 
         $this->path = realpath(base_path('resources/views/lasalle'));
     }
@@ -153,9 +162,15 @@ class TriageController extends Controller
             ]);
         }
 
+        // Get the posts associated with the "home" category
+        $posts = $this->getPosts($slug);
+
+        // Is the featured image in each post resized?
+        $this->checkPostsImagesResized($posts);
+
         // view
         return view('pages/home', [
-            'posts'             => $this->getPosts($slug),
+            'posts'             => $posts,
             'DatesHelper'       => DatesHelper::class,
             'HTMLHelper'        => HTMLHelper::class,
             'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
@@ -179,17 +194,32 @@ class TriageController extends Controller
     public function triage($slug)
     {
         // Skip any database querying and go straight to the page?
-        if ($this->skipDatabaseQuery($slug)) {
+        // There is no defaulting to a page if there are no database records. So make sure this
+        // config setting is set when there are no posts.
+        if ($this->skipDatabaseQuery($slug))
+        {
             return view('pages/' . $slug);
         }
 
         // Does this route pertain to a category?
-        if ($this->isCategory($slug)) {
+        if ($this->isCategory($slug))
+        {
+            // Get the posts associated with the "home" category
+            $posts = $this->getPosts($slug);
+
+            if (count($posts) == 0)
+            {
+                // There are no enabled posts publish_on =< today
+                return view('errors/404');
+            }
+
+            // Is the featured image in each post resized?
+            $this->checkPostsImagesResized($posts);
 
             // if there is a separate blade file for this page, then view this separate blade file
-            if ($this->isBladeFile($slug)) {
+           if ($this->isBladeFile($slug)) {
                 return view('pages/' . $slug, [
-                    'posts'             => $this->getPosts($slug),
+                    'posts'             => $posts,
                     'DatesHelper'       => DatesHelper::class,
                     'HTMLHelper'        => HTMLHelper::class,
                     'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
@@ -199,7 +229,7 @@ class TriageController extends Controller
             // if there is a generic blade file for pages, then view this generic blade file
             if ($this->isGenericPageFile($slug)) {
                 return view('pages/' . $this->nameOfGenericBladeFile, [
-                    'posts'             => $this->getPosts($slug),
+                    'posts'             => $posts,
                     'DatesHelper'       => DatesHelper::class,
                     'HTMLHelper'        => HTMLHelper::class,
                     'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
@@ -214,7 +244,11 @@ class TriageController extends Controller
         // It's a single post
         $post = $this->postProcessing->getPostBySlug($slug);
 
-        if (count($post) == 0) {
+        // Resize image
+        $this->resizeImage($post->featured_image);
+
+        if (count($post) == 0)
+        {
             return view('errors/404');
         }
 
@@ -342,5 +376,41 @@ class TriageController extends Controller
         }
 
         return "summary";
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////
+    /////         METHODS THAT SUPPORT IMAGE HANDLING             /////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     *
+     * Iterate through posts to check if the featured images are resized.
+     *
+     * @param  collection   $posts
+     * @return void
+     */
+    public function checkPostsImagesResized($posts)
+    {
+        foreach ($posts as $post)
+        {
+            if ($post->featured_image != "")
+            {
+                $this->resizeImage($post->featured_image);
+            }
+        }
+    }
+
+    /**
+     *
+     * Resize image
+     *
+     * @param  string   $image
+     * @return void
+     */
+    public function resizeImage($image)
+    {
+        $this->imagesHelper->createResizedImageFiles($image);
     }
 }

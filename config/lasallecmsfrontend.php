@@ -170,15 +170,31 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Images path
+    | Uploaded images path
     |--------------------------------------------------------------------------
     |
-    | What is the full path of your images folder, exclusing your "public" folder?
+    | What is the path, under your public folder, where your uploaded images reside?
     |
-    | Eg: "assets/images" = public/assets/images
+    | This folder for images that are uploaded.
+    |
+    | Eg: "assets/images" = public/images
     |
     */
-    'images_folder' => 'images',
+    'images_folder_uploaded' => 'images',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Resizsed images path
+    |--------------------------------------------------------------------------
+    |
+    | What is the path, under your public folder, where your resized images reside?
+    |
+    | This folder for images that LaSalle resizes.
+    |
+    | Eg: "assets/images" = public/images_resized
+    |
+    */
+    'images_folder_resized' => 'images_resized',
 
 
     /*
@@ -186,15 +202,21 @@ return [
     | Image sizes
     |--------------------------------------------------------------------------
     |
+    | What image sizes are required by the front-end?
     |
+    | Image resizing handled by the terrific Intervention package.
     |
+    | When the image size you are requesting is bigger than the source image, only the source image dimensions are used.
     |
+    | "@2x" images are created automatically.
+    |
+    | The array is set up as [ width => height ].
     |
     */
-    'image_sizes' => [
-        'heading_background'     => '-1900x1200',
-        'section_background'     => '-1900x1200',
-        'posts_summary_display'  => '150x150',
-        'posts_detailed_display' => '-300x300',
+    'image_sizes' =>
+    [
+        1900 => 1200,
+        300  => 300,
+        150  => 150,
     ],
 ];
