@@ -65,7 +65,7 @@ namespace Lasallecms\Lasallecmsfrontend\Http\Controllers;
 
 
 // LaSalle Software
-use Lasallecms\Lasallecmsfrontend\Http\Controllers\Controller;
+use Lasallecms\Lasallecmsfrontend\Http\Controllers\FrontendBaseController;
 use Lasallecms\Lasallecmsfrontend\Processing\CategoryProcessing;
 use Lasallecms\Lasallecmsfrontend\Processing\PostProcessing;
 use Lasallecms\Helpers\Dates\DatesHelper;
@@ -79,7 +79,7 @@ use Illuminate\Support\Facades\Config;
 // Laravel classes
 use Illuminate\Filesystem\Filesystem;
 
-class TriageController extends Controller
+class TriageController extends FrontendBaseController
 {
     /**
      * @var Lasallecms\Lasallecmsfrontend\Processing\CategoryProcessing
@@ -133,9 +133,12 @@ class TriageController extends Controller
         Filesystem $files,
         ImagesHelper $imagesHelper
     ) {
-        $this->middleware('auth');
 
         // TODO: FRONTEND MIDDLEWARE!
+        //$this->middleware('auth');
+
+        // execute parent's construct method first in order to run the middleware
+        parent::__construct();
 
         $this->categoryProcessing = $categoryProcessing;
         $this->postProcessing     = $postProcessing;

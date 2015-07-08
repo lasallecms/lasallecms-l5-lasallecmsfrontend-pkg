@@ -39,7 +39,17 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
-abstract class Controller extends BaseController
+abstract class FrontendBaseController extends BaseController
 {
     use DispatchesJobs, ValidatesRequests;
+
+
+    /**
+     * Execute frontend middleware
+     */
+    public function __construct()
+    {
+        // User must be logged to access everything in this package
+        $this->middleware(\Lasallecms\Lasallecmsfrontend\Http\Middleware\CustomFrontendChecks::class);
+    }
 }

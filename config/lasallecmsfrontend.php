@@ -213,10 +213,62 @@ return [
     | The array is set up as [ width => height ].
     |
     */
-    'image_sizes' =>
-    [
+    'image_sizes' => [
         1900 => 1200,
         300  => 300,
         150  => 150,
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Allowed IP addresses for front end only
+    |--------------------------------------------------------------------------
+    |
+    | What IP addresses are allowed to look at the front end? This has nothing to
+    | do with logging in! Stress that this pertains to the front end only -- there
+    | is separate handling for this on the admin side.
+    |
+    | If this array is not blank, then everyone who is *not* from these IP addresses
+    | will be redirected to the "not allowed" page
+    |
+    | Completely optional. To ignore, just leave the array blank.
+    |
+    */
+    'frontend_allowed_ip_addresses' => [
+            '127.0.0.1', '128.0.0.0',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Excluded IP addresses for front end only
+    |--------------------------------------------------------------------------
+    |
+    | What IP addresses are excluded from looking at the front end? This has nothing to
+    | do with logging in! Stress that this pertains to the front end only.
+    |
+    | When the array is *not* blank, it means everyone can look at the front end except
+    | these IP addresses.
+    |
+    | Completely optional. To ignore, just leave the array blank.
+    |
+    */
+    'frontend_excluded_ip_addresses' => [
+        '127.0.0.1', '128.0.0.0',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front end is down / display flash page
+    |--------------------------------------------------------------------------
+    |
+    | Do not allow anyone to look at the front end. Instead, redirect everyone
+    | to a splash page.
+    |
+    | Exception: anyone logged into the admin is allowed to view the front end.
+    |
+    | true or false.
+    |
+    */
+    'frontend_display_flash_page' => false,
 ];
