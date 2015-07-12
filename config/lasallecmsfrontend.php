@@ -177,7 +177,7 @@ return [
     |
     | This folder for images that are uploaded.
     |
-    | Eg: "assets/images" = public/images
+    | Eg: "images" = public/images
     |
     */
     'images_folder_uploaded' => 'images',
@@ -191,7 +191,7 @@ return [
     |
     | This folder for images that LaSalle resizes.
     |
-    | Eg: "assets/images" = public/images_resized
+    | Eg: "images" = public/images_resized
     |
     */
     'images_folder_resized' => 'images_resized',
@@ -235,9 +235,8 @@ return [
     | Completely optional. To ignore, just leave the array blank.
     |
     */
-    'frontend_allowed_ip_addresses' => [
-            '127.0.0.1', '128.0.0.0',
-    ],
+    //'frontend_allowed_ip_addresses' => [ '127.0.0.1', '128.0.0.0', ],
+    'frontend_allowed_ip_addresses' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -253,9 +252,8 @@ return [
     | Completely optional. To ignore, just leave the array blank.
     |
     */
-    'frontend_excluded_ip_addresses' => [
-        '127.0.0.1', '128.0.0.0',
-    ],
+    //'frontend_excluded_ip_addresses' => [ '127.0.0.1', '128.0.0.0', ],
+    'frontend_excluded_ip_addresses' => [],
 
     /*
     |--------------------------------------------------------------------------
