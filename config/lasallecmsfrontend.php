@@ -191,7 +191,7 @@ return [
     |
     | This folder for images that LaSalle resizes.
     |
-    | Eg: "images" = public/images_resized
+    | Eg: "images_resized" = public/images_resized
     |
     */
     'images_folder_resized' => 'images_resized',
