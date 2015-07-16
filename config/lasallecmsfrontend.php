@@ -115,6 +115,30 @@ return [
 
 
     /*
+    |--------------------------------------------------------------------------
+    | Site author
+    |--------------------------------------------------------------------------
+    |
+    | For the author meta tag.
+    |
+    */
+    'site_author' => 'Bob Bloom',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Site description
+    |--------------------------------------------------------------------------
+    |
+    | For the description meta tag.
+    |
+    | See og_description below.
+    |
+    */
+    'site_description' => 'Flagship site of LaSalle Software, based on the superb Laravel Framework for PHP, plus blog. There is a separate Media site with podcasts.',
+
+
+    /*
 	|--------------------------------------------------------------------------
 	| Summary, or detailed, list display of posts
 	|--------------------------------------------------------------------------
@@ -212,12 +236,72 @@ return [
     |
     | The array is set up as [ width => height ].
     |
+    | 600x600 for social media tags.
+    |
     */
     'image_sizes' => [
         1900 => 1200,
+        600  => 600,
         300  => 300,
         150  => 150,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default category image
+    |--------------------------------------------------------------------------
+    |
+    | When no category image is defined, what image do you want to use?
+    |
+    */
+    'default_category_image' => 'category_image.jpg',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image size for category image
+    |--------------------------------------------------------------------------
+    |
+    | When posts for a category are displayed, the category's featured image is displayed at the top of the listing.
+    |
+    | What is the size of this image?
+    |
+    | Remember: the image should be twice as big, in order to use "@2x" for the retina plugin.
+    |
+    */
+    'category_featured_image_size' => [ 1900 => 350 ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Path to the view (blade) files
+    |--------------------------------------------------------------------------
+    |
+    | What is path to the blade files?
+    |
+    | This path MUST be specified in the config/view.php "paths" setting.
+    |
+    */
+    'pathToTheBladeFiles' => 'resources/views/lasalle',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Name of the generic blade file for pages
+    |--------------------------------------------------------------------------
+    |
+    | What is the name of the generic file in your blade files (views) to display pages?
+    |
+    | You can have a blade file called "about.blade.php" for your About page. Or, instead of hand crafting
+    | "about.blade.php", have a blade file that handles the pages instead.
+    |
+    | Yo, do *NOT* append your file name with ".blade.php"!
+    |
+    | BTW, just to be a nag, remember that the categories in your "categories" table in the database
+    | are pages.
+    |
+    */
+    'nameOfGenericBladeFile' => 'generic_pages',
 
 
     /*
@@ -269,4 +353,88 @@ return [
     |
     */
     'frontend_display_flash_page' => false,
+
+
+
+    /*
+    |===============================================================================================
+    |                                ***  Default Open Graph Markup Tags  ***
+    |===============================================================================================
+    |
+    | Tag descriptions are straight from https://developers.facebook.com/docs/sharing/webmasters
+    |
+    | These are tags used when individual page tags are unavailable, kind-of, sort-of. EG, the home page(?!)
+    |
+    | I am still feeling my way through these OG tags
+    |
+    | https://moz.com/blog/meta-data-templates-123
+    |
+    */
+
+    /*
+     * og:url
+     *
+     * The canonical URL for your page. This should be the undecorated URL, without session variables,
+     * user identifying parameters, or counters. Likes and Shares for this URL will aggregate at this URL.
+     * For example, mobile domain URLs should point to the desktop version of the URL as the canonical URL
+     * to aggregate Likes and Shares across different versions of the page.
+     */
+    'og_url' => '',
+
+    /*
+     * og:title
+     *
+     * The title of your article without any branding such as your site name.
+     */
+    'og_title' => 'Home page',
+
+    /*
+     * og:description
+     *
+     * A brief description of the content, usually between 2 and 4 sentences. This will
+     * displayed below the title of the post on Facebook.
+     */
+    'og_description' => 'Flagship site of LaSalle Software, based on the superb Laravel Framework for PHP, plus blog. There is a separate Media site with podcasts.',
+
+    /*
+     * og:site_name
+     *
+     * The name of your website (such as IMDb, not imdb.com).
+     */
+    'og_site_name' => "South LaSalle",
+
+    /*
+     * og:type
+     *
+     * The type of media of your content. This tag impacts how your content shows up in News Feed.
+     * If you don't specify a type,the default is website. Each URL should be a single object, so multiple
+     * og:type values are not possible. Find the full list of object types in our Object Types Reference
+     *
+     * https://developers.facebook.com/docs/reference/opengraph#object-type
+     */
+    'og_type' => 'article',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Twitter card tags
+    |--------------------------------------------------------------------------
+    |
+    | https://dev.twitter.com/cards/
+    |
+    */
+    'twitter_card'      => 'summary_large_image',
+    'twitter_site'      => '@bobbloom',
+    'twitter_creator'   => '@bobbloom',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default image
+    |--------------------------------------------------------------------------
+    |
+    | When a post has no featured image
+    |
+    */
+    'social_media_default_image'  => 'http://southlasalle.com/images_tsltc/southlasalle-logo.png',
+
 ];

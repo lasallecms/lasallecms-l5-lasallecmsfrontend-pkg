@@ -99,26 +99,14 @@ class TriageController extends FrontendBaseController
     protected $files;
 
     /**
-     * Path to the view files
-     *
-     * @var string
-     */
-    protected $path;
-
-    /**
-     * Name of the generic blade file for pages.
-     *
-     * If you do not have a separate blade file for (some) pages, then you'll need a generic blade file for
-     * (some) pages.
-     *
-     * @var string
-     */
-    protected $nameOfGenericBladeFile = 'generic_pages.blade.php';
-
-    /**
      * @var Lasallecms\Helpers\Images\ImagesHelper
      */
     protected $imagesHelper;
+
+    /**
+     * @var  The category ID
+     */
+    protected $categoryId;
 
 
 
@@ -144,8 +132,6 @@ class TriageController extends FrontendBaseController
         $this->postProcessing     = $postProcessing;
         $this->files              = $files;
         $this->imagesHelper       = $imagesHelper;
-
-        $this->path = realpath(base_path('resources/views/lasalle'));
     }
 
 
@@ -160,8 +146,9 @@ class TriageController extends FrontendBaseController
         // Skip any database querying and go straight to the page?
         if ($this->skipDatabaseQuery($slug)) {
             return view('pages/home', [
-                'DatesHelper' => DatesHelper::class,
-                'HTMLHelper'  => HTMLHelper::class,
+                'DatesHelper'       => DatesHelper::class,
+                'HTMLHelper'        => HTMLHelper::class,
+                'ImagesHelper'      => $this->imagesHelper,
             ]);
         }
 
@@ -176,8 +163,23 @@ class TriageController extends FrontendBaseController
             'posts'             => $posts,
             'DatesHelper'       => DatesHelper::class,
             'HTMLHelper'        => HTMLHelper::class,
+            'ImagesHelper'      => $this->imagesHelper,
             'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
         ]);
+    }
+
+
+    ///////////////////////////////////////////////////////////////////
+    /////             SPECIAL METHOD FOR ERROR PAGES              /////
+    ///////////////////////////////////////////////////////////////////
+    public function fourohfour()
+    {
+        return view('special_pages/404');
+    }
+
+    public function fiveohthree()
+    {
+        return view('special_pages/503');
     }
 
 
@@ -191,11 +193,14 @@ class TriageController extends FrontendBaseController
      *
      * The route must be in the form https://domain.com/{slug}
      *
-     * @param   text $slug Either a slug, or title, depending on what the route represents
+     * @param   text   $slug     Either a slug, or title, depending on what the route represents
      * @return  view
      */
     public function triage($slug)
     {
+        $slug = strtolower($slug);
+
+
         // Skip any database querying and go straight to the page?
         // There is no defaulting to a page if there are no database records. So make sure this
         // config setting is set when there are no posts.
@@ -205,36 +210,57 @@ class TriageController extends FrontendBaseController
         }
 
         // Does this route pertain to a category?
+        // If so, then we must list all the posts (filtered by enabled and publish_on) for that category
         if ($this->isCategory($slug))
         {
-            // Get the posts associated with the "home" category
-            $posts = $this->getPosts($slug);
+            // Get the category
+            $category = $this->categoryProcessing->getCategory($this->categoryId);
+
+            // Process the category's image
+
+            // (i) resize the category image
+            $this->imagesHelper->createCategoryResizedImageFiles($category->featured_image);
+
+            // (ii) what is the name of the resized category image that the view will use?
+            //      yeah, do this second as about to change $category->featured_image
+            $category->featured_image = $this->imagesHelper->getCategoryFeaturedImage($category->featured_image);
+
+
+            // Get the posts associated with this category
+            $posts = $this->getPosts($this->categoryId);
 
             if (count($posts) == 0)
             {
                 // There are no enabled posts publish_on =< today
-                return view('errors/404');
+                return view('special_pages/404');
             }
 
             // Is the featured image in each post resized?
             $this->checkPostsImagesResized($posts);
 
+
             // if there is a separate blade file for this page, then view this separate blade file
            if ($this->isBladeFile($slug)) {
                 return view('pages/' . $slug, [
+                    'category'          => $category,
                     'posts'             => $posts,
+                    'pagetitle'         => $category->title,
                     'DatesHelper'       => DatesHelper::class,
                     'HTMLHelper'        => HTMLHelper::class,
+                    'ImagesHelper'      => $this->imagesHelper,
                     'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
                 ]);
             }
 
             // if there is a generic blade file for pages, then view this generic blade file
             if ($this->isGenericPageFile($slug)) {
-                return view('pages/' . $this->nameOfGenericBladeFile, [
+                return view('pages/' . Config::get('lasallecmsfrontend.nameOfGenericBladeFile'), [
+                    'category'          => $category,
                     'posts'             => $posts,
+                    'pagetitle'         => $category->title,
                     'DatesHelper'       => DatesHelper::class,
                     'HTMLHelper'        => HTMLHelper::class,
+                    'ImagesHelper'      => $this->imagesHelper,
                     'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
                 ]);
             }
@@ -243,23 +269,44 @@ class TriageController extends FrontendBaseController
             return view('errors/404');
         }
 
-
         // It's a single post
         $post = $this->postProcessing->getPostBySlug($slug);
 
-        // Resize image
-        $this->resizeImage($post->featured_image);
-
-        if (count($post) == 0)
-        {
-            return view('errors/404');
+        if (count($post) == 0) {
+            return view('special_pages/404');
         }
 
-        return view('posts/single_post', [
+        // Figure out if the post is using a specified featured image; or, if no such image,
+        // then use the category's default image as this post's featured image.
+        $post->featured_image = $this->imagesHelper->categoryImageDefaultOrSpecified($post->featured_image);
+
+        // Resize the post's featured image -- if not yet resized.
+        $this->imagesHelper->createPostResizedImageFiles($post->featured_image);
+
+
+        // Set up the social media tags
+
+        // first, set up the image
+        if ($post->featured_image == "") {
+             $post->featured_image = Config::get('lasallecmsfrontend.social_media_default_image');
+        }
+        $post->urlImage = $this->imagesHelper->urlOfImage($post->featured_image,600,600);
+
+
+        // second, create the social media tag arrays
+        $openGraph = HTMLHelper::createOpenGraphTagsForPost($post);
+        $twitter   = HTMLHelper::createTwitterTagsForPost($post);
+        $google    = HTMLHelper::createGoogleTagsForPost($post);
+
+
+        return view('pages/single_post', [
             'post'              => $post,
             'DatesHelper'       => DatesHelper::class,
             'HTMLHelper'        => HTMLHelper::class,
-            'isSummaryOrDetail' => $this->isSummaryOrDetail($slug),
+            'ImagesHelper'      => $this->imagesHelper,
+            'openGraph'         => $openGraph,
+            'twitter'           => $twitter,
+            'google'            => $google,
         ]);
     }
 
@@ -305,6 +352,13 @@ class TriageController extends FrontendBaseController
             return false;
         }
 
+        // Yes, this is a category!
+
+        // Let's save the category ID for further processing
+        $category = $category->toArray();
+        $this->categoryId = $category['id'];
+
+        // return true
         return true;
     }
 
@@ -317,9 +371,9 @@ class TriageController extends FrontendBaseController
      */
     public function isBladeFile($slug)
     {
-        $fullPath = $this->path . '/pages/' . $slug . '.blade.php';
-        if ($this->files->isFile($fullPath))
-        {
+        $fullPath = base_path() . '/' . Config::get('lasallecmsfrontend.pathToTheBladeFiles') . '/pages/' . $slug . '.blade.php';
+
+        if ($this->files->isFile($fullPath)) {
             return true;
         }
 
@@ -335,10 +389,9 @@ class TriageController extends FrontendBaseController
      */
     public function isGenericPageFile($slug)
     {
-        $fullPath = $this->path . '/pages/' . $this->nameOfGenericBladeFile;
+        $fullPath = base_path() . '/' . Config::get('lasallecmsfrontend.pathToTheBladeFiles') . '/pages/' . Config::get('lasallecmsfrontend.nameOfGenericBladeFile') . '.blade.php';
 
-        if ($this->files->isFile($fullPath))
-        {
+        if ($this->files->isFile($fullPath)) {
             return true;
         }
 
@@ -349,14 +402,12 @@ class TriageController extends FrontendBaseController
     /**
      * Get posts by category slug
      *
-     * @param   text          $slug  The category's slug
+     * @param   int          $categoryId      The category's ID
      * @return  collection
      */
-    public function getPosts($slug)
+    public function getPosts($categoryId)
     {
-        $categoryId = $this->categoryProcessing->getCategoryId($slug);
-
-        return $this->categoryProcessing->getPostsByCategoryId($categoryId->id);
+        return $this->categoryProcessing->getPostsByCategoryId($categoryId);
     }
 
 
@@ -400,20 +451,21 @@ class TriageController extends FrontendBaseController
         {
             if ($post->featured_image != "")
             {
-                $this->resizeImage($post->featured_image);
+                $this->imagesHelper->createPostResizedImageFiles($post->featured_image);
             }
         }
     }
 
+
     /**
      *
-     * Resize image
+     * Resize category's featured image
      *
-     * @param  string   $image
+     * @param  string   $categoryFeaturedImage
      * @return void
      */
-    public function resizeImage($image)
+    public function resizeCategoryFeaturedImage($categoryFeaturedImage)
     {
-        $this->imagesHelper->createResizedImageFiles($image);
+        $this->imagesHelper->createResizedImageFiles($categoryFeaturedImage, true);
     }
 }

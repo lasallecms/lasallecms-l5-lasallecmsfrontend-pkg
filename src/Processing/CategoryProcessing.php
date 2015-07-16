@@ -36,20 +36,19 @@ namespace Lasallecms\Lasallecmsfrontend\Processing;
 // LaSalle Software
 use Lasallecms\Lasallecmsapi\Repositories\CategoryRepository;
 
-
 // Laravel facades
 use Illuminate\Support\Facades\Config;
 
 class CategoryProcessing
 {
-    /*
+    /**
      * Instance of the BASE repository
      *
      * @var Lasallecms\Lasallecmsapi\Repositories\CategoryRepository
      */
     protected $repository;
 
-    /*
+    /**
      * Namespace and class name of the model
      *
      * @var string
@@ -67,7 +66,7 @@ class CategoryProcessing
     }
 
 
-    /*
+    /**
      * Get the category ID from the category TITLE.
      *
      * Enabled categories only!
@@ -78,11 +77,22 @@ class CategoryProcessing
     public function getCategoryId($categoryTitle)
     {
         return $this->repository->findCategoryIdByTitle($categoryTitle);
-
-        $this->repository->injectModelIntoRepository($this->namespaceClassnameModel);
     }
 
-    /*
+    /**
+     * Get the category record from the category ID
+     *
+     * Enabled categories only!
+     *
+     * @param   int   $categoryId   The ID of the category
+     * @return  int
+     */
+    public function getCategory($categoryId)
+    {
+        return $this->repository->findCategoryById($categoryId);
+    }
+
+    /**
      * Get the posts associated with a specific category ID.
      *
      * Enabled posts only.

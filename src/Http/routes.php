@@ -35,6 +35,20 @@
  *  ------------------------------------------
  */
 
+// in the event "404" is the route!
+// Home
+$router->get('404', [
+    'as'   => '404',
+    'uses' => 'TriageController@fourohfour',
+
+]);
+
+$router->get('503', [
+    'as'   => '503',
+    'uses' => 'TriageController@fiveohthree',
+
+]);
+
 
 // single post by slug, or category listing (by title)
 $router->get('{slug}', 'TriageController@triage');
