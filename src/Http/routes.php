@@ -59,3 +59,64 @@ $router->get('/', [
    'uses' => 'TriageController@home',
 
 ]);
+
+/**
+ * Blog feed route
+ *
+ * https://github.com/RoumenDamianoff/laravel-feed/wiki/basic-feed
+ *
+ *
+ */
+Route::get('/feed/blog', function() {
+
+    $feed_number_of_posts = \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.feed_number_of_posts');
+
+    $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
+
+    // create new feed
+    $feed = Feed::make();
+
+    // cache the feed for 60 minutes (second parameter is optional)
+    $feed->setCache(60, 'laravelFeedKey');
+
+    // check if there is cached feed and build new only if is not
+    if (!$feed->isCached())
+    {
+        // creating rss feed with our most recent $feed_number_of_posts posts
+        $posts = DB::table('posts')
+            ->where('publish_on', '<=', $todaysDate)
+            ->where('enabled', '=', "1")
+            ->orderby('updated_at', 'DESC')
+            ->take($feed_number_of_posts)
+            ->get();
+
+
+        // set your feed's title, description, link, pubdate and language
+        $feed->title =  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.feed_site_title');
+        $feed->description =  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.site_description');
+        $feed->logo =  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.social_media_default_image');
+        $feed->link = URL::to('feed');
+        $feed->setDateFormat('datetime'); // 'datetime', 'timestamp' or 'carbon'
+        $feed->pubdate = $posts[0]->updated_at;
+        $feed->lang = 'en';
+        $feed->setShortening(true); // true or false
+        $feed->setTextLimit(100); // maximum length of description text
+
+
+        foreach ($posts as $post)
+        {
+            // set item's title, author, url, pubdate, description and content
+            $feed->add($post->title,  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.site_author'), URL::to($post->slug), $post->updated_at, $post->excerpt, $post->content);
+        }
+
+    }
+
+    // first param is the feed format
+    // optional: second param is cache duration (value of 0 turns off caching)
+    // optional: you can set custom cache key with 3rd param as string
+    return $feed->render('atom');
+
+    // to return your feed as a string set second param to -1
+    // $xml = $feed->render('atom', -1);
+
+});

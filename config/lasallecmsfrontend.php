@@ -121,6 +121,8 @@ return [
     |
     | For the author meta tag.
     |
+    | For the feed.
+    |
     */
     'site_author' => 'Bob Bloom',
 
@@ -131,6 +133,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | For the description meta tag.
+    |
+    | For the feed.
     |
     | See og_description below.
     |
@@ -358,8 +362,16 @@ return [
 
     /*
     |===============================================================================================
-    |                                ***  Default Open Graph Markup Tags  ***
+    |                           ***  START: SOCIAL MEDIA META TAGS  ***
     |===============================================================================================
+    |
+    */
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Facebook open graphs tags
+    |--------------------------------------------------------------------------
     |
     | Tag descriptions are straight from https://developers.facebook.com/docs/sharing/webmasters
     |
@@ -370,23 +382,6 @@ return [
     | https://moz.com/blog/meta-data-templates-123
     |
     */
-
-    /*
-     * og:url
-     *
-     * The canonical URL for your page. This should be the undecorated URL, without session variables,
-     * user identifying parameters, or counters. Likes and Shares for this URL will aggregate at this URL.
-     * For example, mobile domain URLs should point to the desktop version of the URL as the canonical URL
-     * to aggregate Likes and Shares across different versions of the page.
-     */
-    'og_url' => '',
-
-    /*
-     * og:title
-     *
-     * The title of your article without any branding such as your site name.
-     */
-    'og_title' => 'Home page',
 
     /*
      * og:description
@@ -432,9 +427,32 @@ return [
     | Default image
     |--------------------------------------------------------------------------
     |
-    | When a post has no featured image
+    | When a post has no featured image.
+    |
+    | Also for the feed.
     |
     */
     'social_media_default_image'  => 'http://southlasalle.com/images_tsltc/southlasalle-logo.png',
+
+    /*
+    |===============================================================================================
+    |                           ***  END: SOCIAL MEDIA META TAGS  ***
+    |===============================================================================================
+    |
+    */
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Feed
+    |--------------------------------------------------------------------------
+    |
+    | Based on https://github.com/RoumenDamianoff/laravel-feed
+    |
+    */
+    'feed_number_of_posts' => 25,
+    'feed_site_title'      => 'South LaSalle Dot Com',
+
 
 ];
