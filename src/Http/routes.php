@@ -50,15 +50,7 @@ $router->get('503', [
 ]);
 
 
-// single post by slug, or category listing (by title)
-$router->get('{slug}', 'TriageController@triage');
 
-// Home
-$router->get('/', [
-   'as'   => 'home',
-   'uses' => 'TriageController@home',
-
-]);
 
 /**
  * Blog feed route
@@ -120,3 +112,58 @@ Route::get('/feed/blog', function() {
     // $xml = $feed->render('atom', -1);
 
 });
+
+
+/**
+ * Sitemap
+ *
+ * https://github.com/RoumenDamianoff/laravel-sitemap/wiki/Generate-sitemap
+ *
+ *
+ */
+Route::get('mysitemap', function(){
+
+    $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
+
+    // create new sitemap object
+    $sitemap = App::make("sitemap");
+
+
+    // add items to the sitemap (url, date, priority, freq)
+    //$sitemap->add(URL::to(), '2012-08-25T20:10:00+02:00', '1.0', 'daily');
+    //$sitemap->add(URL::to('page'), '2012-08-26T12:30:00+02:00', '0.9', 'monthly');
+
+
+
+    // get all posts from db
+    $posts = DB::table('posts')
+        ->where('publish_on', '<=', $todaysDate)
+        ->where('enabled', '=', "1")
+        ->orderby('updated_at', 'DESC')
+        ->get();
+    //dd("mysitemap = ".$todaysDate);
+    // add every post to the sitemap
+    foreach ($posts as $post)
+    {
+        $sitemap->add($post->slug, $post->updated_at, '1.0', 'daily');
+    }
+
+    // generate your sitemap (format, filename)
+    $sitemap->store('xml', 'sitemap');
+    // this will generate file mysitemap.xml to your public folder
+
+});
+
+
+
+
+
+// single post by slug, or category listing (by title)
+$router->get('{slug}', 'TriageController@triage');
+
+// Home
+$router->get('/', [
+    'as'   => 'home',
+    'uses' => 'TriageController@home',
+
+]);
