@@ -119,21 +119,13 @@ Route::get('/feed/blog', function() {
  *
  * https://github.com/RoumenDamianoff/laravel-sitemap/wiki/Generate-sitemap
  *
- *
  */
-Route::get('mysitemap', function(){
+Route::get('sitemap', function() {
 
     $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
 
     // create new sitemap object
     $sitemap = App::make("sitemap");
-
-
-    // add items to the sitemap (url, date, priority, freq)
-    //$sitemap->add(URL::to(), '2012-08-25T20:10:00+02:00', '1.0', 'daily');
-    //$sitemap->add(URL::to('page'), '2012-08-26T12:30:00+02:00', '0.9', 'monthly');
-
-
 
     // get all posts from db
     $posts = DB::table('posts')
