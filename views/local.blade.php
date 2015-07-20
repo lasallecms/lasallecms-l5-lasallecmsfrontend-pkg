@@ -1,1 +1,0 @@
-<h1>welcome tot he frontend local.blade.php</h1>
