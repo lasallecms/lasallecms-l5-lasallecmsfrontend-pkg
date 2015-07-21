@@ -155,6 +155,27 @@ return [
 
 
     /*
+    |--------------------------------------------------------------------------
+    | http or https
+    |--------------------------------------------------------------------------
+    |
+    | Is this site secure. That is, "http://" or "https://". Generally, you want your
+    | site to be secure.
+    |
+    | Supposed to use Laravel's "env" for this, but I want to try out a config setting.
+    |
+    | My Helper package uses this setting, which is referenced by the flagship's KERNAL.php.
+    |
+    | For both front and back end.
+    |
+    | true or false
+    |
+    */
+    'secureURL' => false,
+
+
+
+    /*
 	|--------------------------------------------------------------------------
 	| Summary, or detailed, list display of posts
 	|--------------------------------------------------------------------------
