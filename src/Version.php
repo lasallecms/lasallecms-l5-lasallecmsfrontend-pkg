@@ -1,6 +1,6 @@
 <?php
 
-namespace Lasallecms\Lasallecmsfrontend\Http\Controllers;
+namespace Lasallecms\Lasallecmsfrontend;
 
 /**
  *
@@ -30,25 +30,41 @@ namespace Lasallecms\Lasallecmsfrontend\Http\Controllers;
  *
  */
 
-
-// Base controller from https://github.com/laravel/laravel/blob/master/app/Http/Controllers/Controller.php
-
-
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-
-abstract class FrontendBaseController extends BaseController
+class Version
 {
-    use DispatchesJobs, ValidatesRequests;
+    /**
+     * This package's version number.
+     *
+     * @var string
+     */
+    const VERSION = '1.0';
 
 
     /**
-     * Execute frontend middleware
+     * This package's name.
+     *
+     * @var string
      */
-    public function __construct()
+    const PACKAGE = 'Front-end package for the LaSalle Content Management System';
+
+
+    /**
+     * Get the version number of this package.
+     *
+     * @return string
+     */
+    public function version()
     {
-        // User must be logged to access everything in this package
-        $this->middleware(\Lasallecms\Lasallecmsfrontend\Http\Middleware\CustomFrontendChecks::class);
+        return static::VERSION;
+    }
+
+    /**
+     * Get the name of this package.
+     *
+     * @return string
+     */
+    public function packageName()
+    {
+        return static::PACKAGE;
     }
 }
