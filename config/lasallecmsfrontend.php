@@ -84,9 +84,9 @@
     | ../lasalle/pages/about.blade.php
     |                  home.blade.php
     |                  team.blade.php
-    |           /layouts/
-    |           /partials/
-    |           /errors/
+    | ../lasalle/layouts/
+    | ../lasalle/partials/
+    | ../lasalle/errors/
     |
 */
 
@@ -100,10 +100,10 @@ return [
 	|--------------------------------------------------------------------------
 	|
 	| Path under the public folder, and filename, of the frontend's icon. Please
-        | do not use a "/" as the first character. Example: public/icons/favicon.ico would 
-        | 'icons/favicon.ico'. 
-        |
-        | Traditional favicon:
+	| do not use a "/" as the first character. Example: public/icons/favicon.ico would
+	| 'icons/favicon.ico'.
+	|
+	| Traditional favicon:
 	|  * size: 16x16 or 32x32;
 	|  * transparency is OK.
 	| (http://mky.be/favicon/)
@@ -121,7 +121,7 @@ return [
     | Appears in the admin header
     |
     */
-    'site_name' => 'PACKAGES DEV SITE!',
+    'site_name' => env('APP_SITE_NAME'),
 
 
 
@@ -170,7 +170,7 @@ return [
     | true or false
     |
     */
-    'secureURL' => false,
+    'secureURL' => env('APP_SITE_SECURE'),
 
 
 
