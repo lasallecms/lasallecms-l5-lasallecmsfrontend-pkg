@@ -388,7 +388,7 @@ return [
     | true or false.
     |
     */
-    'frontend_display_flash_page' => false,
+    'frontend_display_flash_page' => env('APP_FRONTEND_DISPLAY_FLASH_PAGE'),
 
 
 
