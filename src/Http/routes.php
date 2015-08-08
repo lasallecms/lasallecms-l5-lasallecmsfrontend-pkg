@@ -28,6 +28,23 @@
  *
  */
 
+
+/* *********************************************************************************************** */
+/* *********************************************************************************************** */
+/*
+ *  Originally, I placed front-end routes in \Lasallecms\Lasallecmsfrontend\Http\routes.php.
+ *  Seems like a good idea because the standard front-end routes emanate from this package. But, not
+ *  such a great idea when it's desirable to customize those routes.
+ *
+ *  To allow the "home" and "{slug}" to be customized -- or over-ridden -- I am extracting the two main
+ *  routes out of my front-end package, and placing them here in my Flagship's route.php.
+ *
+ */
+/* *********************************************************************************************** */
+/* *********************************************************************************************** */
+
+
+
 /**
  * ------------------------------------------
  *  Site Routes
@@ -47,7 +64,6 @@ $router->get('503', [
     'uses' => 'TriageController@fiveohthree',
 
 ]);
-
 
 
 
@@ -144,17 +160,3 @@ Route::get('sitemap', function() {
     // this will generate file mysitemap.xml to your public folder
 
 });
-
-
-
-
-
-// single post by slug, or category listing (by title)
-$router->get('{slug}', 'TriageController@triage');
-
-// Home
-$router->get('/', [
-    'as'   => 'home',
-    'uses' => 'TriageController@home',
-
-]);
