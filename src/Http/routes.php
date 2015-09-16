@@ -39,32 +39,64 @@
  *  To allow the "home" and "{slug}" to be customized -- or over-ridden -- I am extracting the two main
  *  routes out of my front-end package, and placing them here in my Flagship's route.php.
  *
+ *  Update: Actually, I am putting 'em back, and wrapping each route here with a conditional based on
+ *  config settings.
+ *
  */
 /* *********************************************************************************************** */
 /* *********************************************************************************************** */
 
 
 
-/**
- * ------------------------------------------
- *  Site Routes
- *  ------------------------------------------
- */
+/* ***********************************************************************************************
+ *  Front-end "site" routes
+ * *********************************************************************************************** */
+
+
+// single post by slug, or category listing (by title)
+if (config('lasallecmsfrontend.frontend_route_single_post')) {
+    $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage')->where('slug',
+        '!=', 'admin');
+}
+
+
+// Home
+if (config('lasallecmsfrontend.frontend_route_home')) {
+    $router->get('/', [
+        'as' => 'home',
+        'uses' => '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@home',
+    ]);
+}
+
+
+// Route for my contact package's thank you page. Here for convenience only
+if (config('lasallecmsfrontend.frontend_route_contact_form_thank_you')) {
+    Route::get('contact_form_thank_you', [
+        'as' => 'contact_form_thank_you',
+        'us$router->getes' => 'ContactController@thankyou'
+    ]);
+}
+
+
 
 // in the event "404" is the route!
-// Home
-$router->get('404', [
-    'as'   => '404',
-    'uses' => 'TriageController@fourohfour',
+if (config('lasallecmsfrontend.frontend_route_404')) {
+    $router->get('404', [
+        'as' => '404',
+        'uses' => 'TriageController@fourohfour',
 
-]);
+    ]);
+}
 
-$router->get('503', [
-    'as'   => '503',
-    'uses' => 'TriageController@fiveohthree',
 
-]);
+// in the event "503" is the route!
+if (config('lasallecmsfrontend.frontend_route_503')) {
+    $router->get('503', [
+        'as' => '503',
+        'uses' => 'TriageController@fiveohthree',
 
+    ]);
+}
 
 
 /**
@@ -74,59 +106,60 @@ $router->get('503', [
  *
  *
  */
-Route::get('/feed/blog', function() {
+if (config('lasallecmsfrontend.frontend_route_blog_feed')) {
+    $router->get('/feed/blog', function () {
 
-    $feed_number_of_posts = \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.feed_number_of_posts');
+        $feed_number_of_posts = \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.feed_number_of_posts');
 
-    $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
+        $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
 
-    // create new feed
-    $feed = Feed::make();
+        // create new feed
+        $feed = Feed::make();
 
-    // cache the feed for 60 minutes (second parameter is optional)
-    $feed->setCache(60, 'laravelFeedKey');
+        // cache the feed for 60 minutes (second parameter is optional)
+        $feed->setCache(60, 'laravelFeedKey');
 
-    // check if there is cached feed and build new only if is not
-    if (!$feed->isCached())
-    {
-        // creating rss feed with our most recent $feed_number_of_posts posts
-        $posts = DB::table('posts')
-            ->where('publish_on', '<=', $todaysDate)
-            ->where('enabled', '=', "1")
-            ->orderby('updated_at', 'DESC')
-            ->take($feed_number_of_posts)
-            ->get();
-
-
-        // set your feed's title, description, link, pubdate and language
-        $feed->title =  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.feed_site_title');
-        $feed->description =  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.site_description');
-        $feed->logo =  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.social_media_default_image');
-        $feed->link = URL::to('feed');
-        $feed->setDateFormat('datetime'); // 'datetime', 'timestamp' or 'carbon'
-        $feed->pubdate = $posts[0]->updated_at;
-        $feed->lang = 'en';
-        $feed->setShortening(true); // true or false
-        $feed->setTextLimit(100); // maximum length of description text
+        // check if there is cached feed and build new only if is not
+        if (!$feed->isCached()) {
+            // creating rss feed with our most recent $feed_number_of_posts posts
+            $posts = DB::table('posts')
+                ->where('publish_on', '<=', $todaysDate)
+                ->where('enabled', '=', "1")
+                ->orderby('updated_at', 'DESC')
+                ->take($feed_number_of_posts)
+                ->get();
 
 
-        foreach ($posts as $post)
-        {
-            // set item's title, author, url, pubdate, description and content
-            $feed->add($post->title,  \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.site_author'), URL::to($post->slug), $post->updated_at, $post->excerpt, $post->content);
+            // set your feed's title, description, link, pubdate and language
+            $feed->title = \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.feed_site_title');
+            $feed->description = \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.site_description');
+            $feed->logo = \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.social_media_default_image');
+            $feed->link = URL::to('feed');
+            $feed->setDateFormat('datetime'); // 'datetime', 'timestamp' or 'carbon'
+            $feed->pubdate = $posts[0]->updated_at;
+            $feed->lang = 'en';
+            $feed->setShortening(true); // true or false
+            $feed->setTextLimit(100); // maximum length of description text
+
+
+            foreach ($posts as $post) {
+                // set item's title, author, url, pubdate, description and content
+                $feed->add($post->title, \Illuminate\Support\Facades\Config::get('lasallecmsfrontend.site_author'),
+                    URL::to($post->slug), $post->updated_at, $post->excerpt, $post->content);
+            }
+
         }
 
-    }
+        // first param is the feed format
+        // optional: second param is cache duration (value of 0 turns off caching)
+        // optional: you can set custom cache key with 3rd param as string
+        return $feed->render('atom');
 
-    // first param is the feed format
-    // optional: second param is cache duration (value of 0 turns off caching)
-    // optional: you can set custom cache key with 3rd param as string
-    return $feed->render('atom');
+        // to return your feed as a string set second param to -1
+        // $xml = $feed->render('atom', -1);
 
-    // to return your feed as a string set second param to -1
-    // $xml = $feed->render('atom', -1);
-
-});
+    });
+}
 
 
 /**
@@ -135,28 +168,29 @@ Route::get('/feed/blog', function() {
  * https://github.com/RoumenDamianoff/laravel-sitemap/wiki/Generate-sitemap
  *
  */
-Route::get('sitemap', function() {
+if (config('lasallecmsfrontend.frontend_route_site_map')) {
+    $router->get('sitemap', function () {
 
-    $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
+        $todaysDate = \Lasallecms\Helpers\Dates\DatesHelper::todaysDateSetToLocalTime();
 
-    // create new sitemap object
-    $sitemap = App::make("sitemap");
+        // create new sitemap object
+        $sitemap = App::make("sitemap");
 
-    // get all posts from db
-    $posts = DB::table('posts')
-        ->where('publish_on', '<=', $todaysDate)
-        ->where('enabled', '=', "1")
-        ->orderby('updated_at', 'DESC')
-        ->get();
-    //dd("mysitemap = ".$todaysDate);
-    // add every post to the sitemap
-    foreach ($posts as $post)
-    {
-        $sitemap->add($post->slug, $post->updated_at, '1.0', 'daily');
-    }
+        // get all posts from db
+        $posts = DB::table('posts')
+            ->where('publish_on', '<=', $todaysDate)
+            ->where('enabled', '=', "1")
+            ->orderby('updated_at', 'DESC')
+            ->get();
+        //dd("mysitemap = ".$todaysDate);
+        // add every post to the sitemap
+        foreach ($posts as $post) {
+            $sitemap->add($post->slug, $post->updated_at, '1.0', 'daily');
+        }
 
-    // generate your sitemap (format, filename)
-    $sitemap->store('xml', 'sitemap');
-    // this will generate file mysitemap.xml to your public folder
+        // generate your sitemap (format, filename)
+        $sitemap->store('xml', 'sitemap');
+        // this will generate file mysitemap.xml to your public folder
 
-});
+    });
+}

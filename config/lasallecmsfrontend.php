@@ -362,7 +362,7 @@ return [
     |--------------------------------------------------------------------------
     | Excluded IP addresses for front end only
     |--------------------------------------------------------------------------
-    |
+    |APP_FRONTEND_ROUTE_503
     | What IP addresses are excluded from looking at the front end? This has nothing to
     | do with logging in! Stress that this pertains to the front end only.
     |
@@ -394,11 +394,125 @@ return [
 
     /*
     |===============================================================================================
-    |                           ***  START: SOCIAL MEDIA META TAGS  ***
+    |                           ***  START: FRONTEND ROUTES  ***
     |===============================================================================================
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: single post by slug, or category listing (by title)
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the "single post" route that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the "single post" route that resides in the front-end package's routes.php
+    |       ==> if set to false, then make sure you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_single_post' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: home
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the "home" route that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the "home" route that resides in the front-end package's routes.php
+    |       ==> if set to false, then make sure you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_home' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: contact page thank you
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the Route for my contact package's thank you page that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the Route for my contact package's thank you page that resides in the front-end package's routes.php
+    |       ==> if set to false, then make sure you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_contact_form_thank_you' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: 404
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the 404 route that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the 404 route that resides in the front-end package's routes.php
+    |       ==> if set to false, then it is optional you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_404' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: 503
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the 503 route that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the 503 route that resides in the front-end package's routes.php
+    |       ==> if set to false, then it is optional that you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_503' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: blog feed
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the blog feed route that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the blog feed route that resides in the front-end package's routes.php
+    |       ==> if set to false, then it is optional that you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_blog_feed' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: sitemap
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the sitemap route that resides in the front-end package's routes.php
+    |
+    | false = do *not* use the sitemap route that resides in the front-end package's routes.php
+    |       ==> if set to false, then it is optional that you have this route in your app's routes.php
+    |
+    | true or false.
+    |
+    */
+    'frontend_route_site_map' => true,
+
+
+
+
+    /*
+    |===============================================================================================
+    |                           ***  START: SOCIAL MEDIA META TAGS  ***
+    |===============================================================================================
+    |
+    */
 
     /*
     |--------------------------------------------------------------------------
