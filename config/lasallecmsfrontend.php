@@ -542,7 +542,7 @@ return [
      *
      * The name of your website (such as IMDb, not imdb.com).
      */
-    'og_site_name' => "South LaSalle",
+    'og_site_name' => env('APP_SITE_NAME'),
 
     /*
      * og:type
