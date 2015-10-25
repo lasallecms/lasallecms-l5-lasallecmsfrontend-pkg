@@ -53,12 +53,6 @@
  * *********************************************************************************************** */
 
 
-// single post by slug, or category listing (by title)
-if (config('lasallecmsfrontend.frontend_route_single_post')) {
-    $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage')->where('slug',
-        '!=', 'admin');
-}
-
 
 // Home
 if (config('lasallecmsfrontend.frontend_route_home')) {
@@ -66,6 +60,34 @@ if (config('lasallecmsfrontend.frontend_route_home')) {
         'as' => 'home',
         'uses' => '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@home',
     ]);
+}
+
+/* -----------------------------------------------------------------------------------------------
+   SINGLE POST BY SLUG
+   -----------------------------------------------------------------------------------------------
+ Evaluate the slug, except when that slug happens to be the exact word "admin". So, do this by:
+
+ $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage')
+         ->where('slug', '!=", 'admin')
+ ;
+
+ Wrong wrong wrong! This not eloquent! This is a Route Parameter. Only two vars, and the second var
+ is a regular expression.
+
+ OK, fine, so find out what the regular expression is for "NOT admin". After searching for this regex,
+ I gave up, especially when one sure-fire solution resulted in more errors (which sums up my life's
+ journey with regex).
+
+ Ultimately, after trying out many things, I found the Request helper method. Bingo!
+
+ http://laravel.com/docs/5.1/helpers#method-request
+ * ----------------------------------------------------------------------------------------------- */
+
+if (!Request::is('admin'))
+{
+    if (config('lasallecmsfrontend.frontend_route_single_post')) {
+        $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage');
+    }
 }
 
 
