@@ -107,6 +107,7 @@ class PostController extends FrontendBaseController
         // Skip any database querying and go straight to the page?
         if ($this->skipDatabaseQuery($slug)) {
             return view('pages/home', [
+                'pagetitle'         => "HOME",
                 'DatesHelper'       => DatesHelper::class,
                 'HTMLHelper'        => HTMLHelper::class,
                 'ImagesHelper'      => $this->imagesHelper,
@@ -121,6 +122,7 @@ class PostController extends FrontendBaseController
 
         // view
         return view('pages/home', [
+            'pagetitle'         => "HOME",
             'posts'             => $posts,
             'DatesHelper'       => DatesHelper::class,
             'HTMLHelper'        => HTMLHelper::class,
