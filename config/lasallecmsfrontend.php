@@ -49,29 +49,6 @@
 
 /*
 	|--------------------------------------------------------------------------
-	| IMPORTANT: PAGE OR POST?  IOW: BLADE FILE OR DATABASE?
-	|--------------------------------------------------------------------------
-    |
-    | Do you want to handcraft your web page; or, do you want to input it into
-    | database (as a post)?
-    |
-    | Either way: CREATE THE POST CATEGORY! Each page needs a post category.
-    |
-    | Of course, either way, you need a blade file.
-    |
-    | For example, a main menu has "Blog", "About", "Our Team".
-    | So you will have post categories "Blog", "About", "Team".
-    | When you click the "About" link (or one of the others), this package,
-    | which has that route,looks for all posts associated with the "About" category.
-    |
-    | ======>   **** IMPORTANT!! ****    <=========
-    | If one or more are posts are found in the database for that category,then the database posts are pushed to the view.
-    | If no posts are found for that category,then no posts are pushed to the view.
-    |
-*/
-
-/*
-	|--------------------------------------------------------------------------
 	| IMPORTANT: YOU MUST SET UP THE FRONT-END VIEWS IN YOUR APP IN A SPECIFIC FOLDER STRUCTURE
 	|--------------------------------------------------------------------------
     |
@@ -176,35 +153,6 @@ return [
 
     /*
 	|--------------------------------------------------------------------------
-	| Summary, or detailed, list display of posts
-	|--------------------------------------------------------------------------
-	|
-	| I prefer blog posts listed in summary form. But, I prefer "about" posts displayed
-    | in detail -- with full content -- in sequence in descending order.
-    |
-    | Yes, I prefer my static pages to be blog posts instead. And have multiple
-    | posts instead of one. Static pages? What the heck are static pages?! Not in LaSalle Software!
-    |
-    | Sometimes I want to list each post in summary form, requiring a click to view the actual post.
-    |
-    | Sometimes I want to list each post in full on one big page, in descending order.
-    |
-    | This setting is where you specify how you prefer your category's display of posts for that
-    | category: in summary form, or in detailed form.
-	|
-    | The category names must be the actual category titles.
-    |
-    | If a category is not listed here, then the posts will be displayed in summary form.
-    |
-	*/
-    'database_pages_summary_or_detail' => [
-        'Blog'  => 'summary',
-        'About' => 'detail',
-    ],
-
-
-    /*
-	|--------------------------------------------------------------------------
 	| Do not query the database for posts.
 	|--------------------------------------------------------------------------
 	|
@@ -226,6 +174,19 @@ return [
     'pages_not_using_database' => [
         'Home', 'Team',
     ],
+
+
+    /*
+	|--------------------------------------------------------------------------
+	| Number of posts to display on the home page
+	|--------------------------------------------------------------------------
+	|
+	| The number of most-recent publishable posts to display on the home page.
+    |
+  	| If the above "pages_not_using_database" includes "Home", then this setting is moot.
+    |
+	*/
+    'number_of_posts_to_display_on_home_page' => 5,
 
 
     /*
@@ -305,7 +266,33 @@ return [
     | Remember: the image should be twice as big, in order to use "@2x" for the retina plugin.
     |
     */
-    'category_featured_image_size' => [ 1900 => 350 ],
+    'category_featured_image_size' => [ 1900 => 400 ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default tag image
+    |--------------------------------------------------------------------------
+    |
+    | There is no image associated with each tag.
+    | All tags will be associated with this image.
+    |
+    */
+    'default_tag_image' => 'tag_image.jpg',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image size for tag image
+    |--------------------------------------------------------------------------
+    |
+    | When posts for a tag are displayed, the tag's default image is displayed at the top of the listing.
+    |
+    | What is the size of this image?
+    |
+    | Remember: the image should be twice as big, in order to use "@2x" for the retina plugin.
+    |
+    */
+    'default_tag_image_image_size' => [ 1900 => 400 ],
 
 
     /*
@@ -319,25 +306,6 @@ return [
     |
     */
     'pathToTheBladeFiles' => 'resources/views/lasalle',
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Name of the generic blade file for pages
-    |--------------------------------------------------------------------------
-    |
-    | What is the name of the generic file in your blade files (views) to display pages?
-    |
-    | You can have a blade file called "about.blade.php" for your About page. Or, instead of hand crafting
-    | "about.blade.php", have a blade file that handles the pages instead.
-    |
-    | Yo, do *NOT* append your file name with ".blade.php"!
-    |
-    | BTW, just to be a nag, remember that the categories in your "categories" table in the database
-    | are pages.
-    |
-    */
-    'nameOfGenericBladeFile' => 'generic_pages',
 
 
     /*
@@ -401,45 +369,67 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Front-end route: single post by slug, or category listing (by title)
+    | Front-end route: home
     |--------------------------------------------------------------------------
     |
-    | true  = use the "single post" route that resides in the front-end package's routes.php
+    | true  = use the "HOME" in this package's routes.php
+    |
+    | false = do *not* use the "home" route that resides in the front-end package's routes.php
+    |       ==> if set to false, then make sure you have this route in your app's routes.php
+
+    |
+    */
+    'frontend_route_home' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: single post by slug
+    |--------------------------------------------------------------------------
+    |
+    | true  =use the "SINGLE POST BY SLUG" in this package's routes.php
     |
     | false = do *not* use the "single post" route that resides in the front-end package's routes.php
     |       ==> if set to false, then make sure you have this route in your app's routes.php
     |
-    | true or false.
-    |
     */
-    'frontend_route_single_post' => false,
+    'frontend_route_single_post' => true,
 
     /*
     |--------------------------------------------------------------------------
-    | Front-end route: home
+    | Front-end route: display posts by category
     |--------------------------------------------------------------------------
     |
-    | true  = use the "home" route that resides in the front-end package's routes.php
+    | true  = use the "DISPLAY ALL POSTS BY CATEGORY" in this package's routes.php
     |
-    | false = do *not* use the "home" route that resides in the front-end package's routes.php
+    | false = do *not* use the "single post" route that resides in the front-end package's routes.php
     |       ==> if set to false, then make sure you have this route in your app's routes.php
     |
-    | true or false.
+    */
+    'frontend_route_display_posts_by_category' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end route: display posts by tag
+    |--------------------------------------------------------------------------
+    |
+    | true  = use the "DISPLAY ALL POSTS BY TAG" in this package's routes.php
+    |
+    | false = do *not* use the "single post" route that resides in the front-end package's routes.php
+    |       ==> if set to false, then make sure you have this route in your app's routes.php
     |
     */
-    'frontend_route_home' => false,
+    'frontend_route_display_posts_by_tag' => true,
 
     /*
     |--------------------------------------------------------------------------
     | Front-end route: contact page thank you
     |--------------------------------------------------------------------------
     |
-    | true  = use the Route for my contact package's thank you page that resides in the front-end package's routes.php
+    | true  = use the Route for my contact package's thank you page in this package's routes.php
     |
     | false = do *not* use the Route for my contact package's thank you page that resides in the front-end package's routes.php
     |       ==> if set to false, then make sure you have this route in your app's routes.php
-    |
-    | true or false.
+
     |
     */
     'frontend_route_contact_form_thank_you' => true,
@@ -449,7 +439,7 @@ return [
     | Front-end route: 404
     |--------------------------------------------------------------------------
     |
-    | true  = use the 404 route that resides in the front-end package's routes.php
+    | true  = use the 404 route in this package's routes.php
     |
     | false = do *not* use the 404 route that resides in the front-end package's routes.php
     |       ==> if set to false, then it is optional you have this route in your app's routes.php
@@ -464,7 +454,7 @@ return [
     | Front-end route: 503
     |--------------------------------------------------------------------------
     |
-    | true  = use the 503 route that resides in the front-end package's routes.php
+    | true  = use the 503 route in this package's routes.php
     |
     | false = do *not* use the 503 route that resides in the front-end package's routes.php
     |       ==> if set to false, then it is optional that you have this route in your app's routes.php
@@ -479,7 +469,7 @@ return [
     | Front-end route: blog feed
     |--------------------------------------------------------------------------
     |
-    | true  = use the blog feed route that resides in the front-end package's routes.php
+    | true  = use the blog feed route in this package's routes.php
     |
     | false = do *not* use the blog feed route that resides in the front-end package's routes.php
     |       ==> if set to false, then it is optional that you have this route in your app's routes.php
@@ -494,7 +484,7 @@ return [
     | Front-end route: sitemap
     |--------------------------------------------------------------------------
     |
-    | true  = use the sitemap route that resides in the front-end package's routes.php
+    | true  = use the sitemap route in this package's routes.php
     |
     | false = do *not* use the sitemap route that resides in the front-end package's routes.php
     |       ==> if set to false, then it is optional that you have this route in your app's routes.php

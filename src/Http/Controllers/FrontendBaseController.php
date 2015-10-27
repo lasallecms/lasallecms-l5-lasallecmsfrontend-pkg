@@ -31,24 +31,123 @@ namespace Lasallecms\Lasallecmsfrontend\Http\Controllers;
  */
 
 
-// Base controller from https://github.com/laravel/laravel/blob/master/app/Http/Controllers/Controller.php
 
 
+// Laravel facades
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
+
+// Laravel classes
 use Illuminate\Foundation\Bus\DispatchesJobs;
+// Base controller from https://github.com/laravel/laravel/blob/master/app/Http/Controllers/Controller.php
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
-abstract class FrontendBaseController extends BaseController
+class FrontendBaseController extends BaseController
 {
     use DispatchesJobs, ValidatesRequests;
 
-
     /**
-     * Execute frontend middleware
+     * Execute middleware
      */
     public function __construct()
     {
         // User must be logged to access everything in this package
         $this->middleware(\Lasallecms\Lasallecmsfrontend\Http\Middleware\CustomFrontendChecks::class);
+    }
+
+
+    ///////////////////////////////////////////////////////////////////
+    /////             SPECIAL METHOD FOR ERROR PAGES              /////
+    ///////////////////////////////////////////////////////////////////
+    public function fourohfour()
+    {
+        return view('errors/404');
+    }
+
+    public function fiveohthree()
+    {
+        return view('errors/503');
+    }
+
+
+    ///////////////////////////////////////////////////////////////////
+    /////       METHODS THAT SUPPORT THE MAIN TRIAGE METHOD       /////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Skip querying the database for this page?
+     *
+     * @param   string $slug
+     * @return  bool
+     */
+    public function skipDatabaseQuery($slug)
+    {
+        $pagesSkippingDatabaseQuery = Config::get('lasallecmsfrontend.pages_not_using_database');
+
+        foreach ($pagesSkippingDatabaseQuery as $page)
+        {
+            if ($page == ucwords($slug))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    /**
+     * Does a blade file exist for this page?
+     *
+     * @param   string $slug
+     * @return  bool
+     */
+    public function isBladeFile($slug)
+    {
+        $fullPath = base_path() . '/' . Config::get('lasallecmsfrontend.pathToTheBladeFiles') . '/pages/' . $slug . '.blade.php';
+
+        if ($this->filesystem->isFile($fullPath)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////
+    /////         METHODS THAT SUPPORT IMAGE HANDLING             /////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     *
+     * Iterate through posts to check if the featured images are resized.
+     *
+     * @param  collection   $posts
+     * @return void
+     */
+    public function checkPostsImagesResized($posts)
+    {
+        foreach ($posts as $post)
+        {
+            if ($post->featured_image != "")
+            {
+                $this->imagesHelper->createPostResizedImageFiles($post->featured_image);
+            }
+        }
+    }
+
+    /**
+     *
+     * Resize category's featured image
+     *
+     * @param  string   $categoryFeaturedImage
+     * @return void
+     */
+    public function resizeCategoryFeaturedImage($categoryFeaturedImage)
+    {
+        $this->imagesHelper->createResizedImageFiles($categoryFeaturedImage, true);
     }
 }

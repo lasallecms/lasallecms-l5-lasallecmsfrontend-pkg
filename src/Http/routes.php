@@ -54,80 +54,72 @@
 
 
 
-// Home
+/* -----------------------------------------------------------------------------------------------
+   HOME
+   ----------------------------------------------------------------------------------------------- */
 if (config('lasallecmsfrontend.frontend_route_home')) {
     $router->get('/', [
-        'as' => 'home',
-        'uses' => '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@home',
+        'as'   => 'home',
+        'uses' => '\Lasallecms\Lasallecmsfrontend\Http\Controllers\PostController@home',
+    ]);
+}
+
+
+
+/* -----------------------------------------------------------------------------------------------
+   DISPLAY ALL POSTS BY CATEGORY
+   ----------------------------------------------------------------------------------------------- */
+if (config('lasallecmsfrontend.frontend_route_display_posts_by_category')) {
+    $router->get('/category/{title}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\CategoryController@DisplayPostsByCategory');
+}
+
+
+
+/* -----------------------------------------------------------------------------------------------
+   DISPLAY ALL POSTS BY TAG
+   ----------------------------------------------------------------------------------------------- */
+if (config('lasallecmsfrontend.frontend_route_display_posts_by_tag')) {
+    $router->get('tag/{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TagController@DisplayPostsByTag');
+}
+
+
+/* -----------------------------------------------------------------------------------------------
+   Route for my contact package's thank you page. Here for convenience only
+   ----------------------------------------------------------------------------------------------- */
+if (config('lasallecmsfrontend.frontend_route_contact_form_thank_you')) {
+    Route::get('contact_form_thank_you', [
+        'as'   => 'contact_form_thank_you',
+        'uses' => 'ContactController@thankyou'
+    ]);
+}
+
+
+/* -----------------------------------------------------------------------------------------------
+   In the event "404" is the route!/var/www/html/lasallecms-l5-packages/packages/lasallecms/lasallecmsadmin
+   ----------------------------------------------------------------------------------------------- */
+if (config('lasallecmsfrontend.frontend_route_404')) {
+    $router->get('404', [
+        'as'   => '404',
+        'uses' => 'FrontendController@fourohfour',
+
     ]);
 }
 
 /* -----------------------------------------------------------------------------------------------
-   SINGLE POST BY SLUG
-   -----------------------------------------------------------------------------------------------
- Evaluate the slug, except when that slug happens to be the exact word "admin". So, do this by:
-
- $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage')
-         ->where('slug', '!=", 'admin')
- ;
-
- Wrong wrong wrong! This not eloquent! This is a Route Parameter. Only two vars, and the second var
- is a regular expression.
-
- OK, fine, so find out what the regular expression is for "NOT admin". After searching for this regex,
- I gave up, especially when one sure-fire solution resulted in more errors (which sums up my life's
- journey with regex).
-
- Ultimately, after trying out many things, I found the Request helper method. Bingo!
-
- http://laravel.com/docs/5.1/helpers#method-request
- * ----------------------------------------------------------------------------------------------- */
-
-if (!Request::is('admin'))
-{
-    if (config('lasallecmsfrontend.frontend_route_single_post')) {
-        $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage');
-    }
-}
-
-
-// Route for my contact package's thank you page. Here for convenience only
-if (config('lasallecmsfrontend.frontend_route_contact_form_thank_you')) {
-    Route::get('contact_form_thank_you', [
-        'as' => 'contact_form_thank_you',
-        'us$router->getes' => 'ContactController@thankyou'
-    ]);
-}
-
-
-
-// in the event "404" is the route!
-if (config('lasallecmsfrontend.frontend_route_404')) {
-    $router->get('404', [
-        'as' => '404',
-        'uses' => 'TriageController@fourohfour',
-
-    ]);
-}
-
-
-// in the event "503" is the route!
+   In the event "503" is the route!
+   ----------------------------------------------------------------------------------------------- */
 if (config('lasallecmsfrontend.frontend_route_503')) {
     $router->get('503', [
-        'as' => '503',
-        'uses' => 'TriageController@fiveohthree',
+        'as'   => '503',
+        'uses' => 'FrontendController@fiveohthree',
 
     ]);
 }
 
 
-/**
- * Blog feed route
- *
- * https://github.com/RoumenDamianoff/laravel-feed/wiki/basic-feed
- *
- *
- */
+/* -----------------------------------------------------------------------------------------------
+   FEED (https://github.com/RoumenDamianoff/laravel-feed/wiki/basic-feed)
+   ----------------------------------------------------------------------------------------------- */
 if (config('lasallecmsfrontend.frontend_route_blog_feed')) {
     $router->get('/feed/blog', function () {
 
@@ -184,12 +176,9 @@ if (config('lasallecmsfrontend.frontend_route_blog_feed')) {
 }
 
 
-/**
- * Sitemap
- *
- * https://github.com/RoumenDamianoff/laravel-sitemap/wiki/Generate-sitemap
- *
- */
+/* -----------------------------------------------------------------------------------------------
+   SITEMAP (https://github.com/RoumenDamianoff/laravel-sitemap/wiki/Generate-sitemap)
+   ----------------------------------------------------------------------------------------------- */
 if (config('lasallecmsfrontend.frontend_route_site_map')) {
     $router->get('sitemap', function () {
 
@@ -215,4 +204,34 @@ if (config('lasallecmsfrontend.frontend_route_site_map')) {
         // this will generate file mysitemap.xml to your public folder
 
     });
+}
+
+
+
+
+/* -----------------------------------------------------------------------------------------------
+   SINGLE POST BY SLUG
+   -----------------------------------------------------------------------------------------------
+ Evaluate the slug, except when that slug happens to be the exact word "admin". So, do this by:
+
+ $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\TriageController@triage')
+         ->where('slug', '!=", 'admin')
+ ;
+
+ Wrong wrong wrong! This not eloquent! This is a Route Parameter. Only two vars, and the second var
+ is a regular expression.SINGLE POST BY SLUG
+
+ OK, fine, so find out what the regular expression is for "NOT admin". After searching for this regex,
+ I gave up, especially when one sure-fire solution resulted in more errors (which sums up my life's
+ journey with regex).
+
+ Ultimately, after trying out many things, I found the Request helper method. Bingo!
+
+ http://laravel.com/docs/5.1/helpers#method-request
+ * ----------------------------------------------------------------------------------------------- */
+if (!Request::is('admin'))
+{
+    if (config('lasallecmsfrontend.frontend_route_single_post')) {
+        $router->get('{slug}', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\PostController@DisplaySinglePost');
+    }
 }
