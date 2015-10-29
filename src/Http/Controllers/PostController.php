@@ -62,7 +62,7 @@ class PostController extends FrontendBaseController
     protected $filesystem;
 
     /*
-     * Instance of the BASE repository
+     * Instance of the Post repository
      *
      * @var Lasallecms\Lasallecmsapi\Repositories\PostRepository
      */
@@ -183,6 +183,32 @@ class PostController extends FrontendBaseController
         $google    = HTMLHelper::createGoogleTagsForPost($post);
 
 
+
+        // "Next" and "Previous" navigation within a single post... well, there can be multiple categories per post,
+        //  so should the "Next" and "Previous" links refer to any ol' post regardless of category; or, should the
+        //  "Next" and "Previous" links within a post refer strictly to posts assigned to the same category?
+        //  Since my intention is to group posts by category, the answer is "assigned to the same category".
+        //
+        //  So... my intention is that POSTS assign to just one category, despite the ability to assign multiple categories.
+        //  Hey, this multiple category thing is really intended for ecommerce, where the parent category = "Products".
+        //  For regular ol' POSTS, my intention is a mandatory one category per post. Essentially creating a one-to-one
+        //  relationship, which is my working assumption for "Next" and "Previous" single post navigation.
+
+        // So, first of all, must be just one category for this post
+        $category = $this->repository->findCategoryForPostById($post->id);
+
+        $nextPostSlug     = "";
+        $previousPostSlug = "";
+
+        if (count($category) == 1)
+        {
+            // Next post
+            $nextPostSlug     = $this->repository->getNextPost($category[0]->category_id, $post->publish_on);
+
+            // Previous post
+            $previousPostSlug = $this->repository->getPreviousPost($category[0]->category_id, $post->publish_on);
+        }
+
         return view('pages/single_post', [
             'post'              => $post,
             'DatesHelper'       => DatesHelper::class,
@@ -191,6 +217,8 @@ class PostController extends FrontendBaseController
             'openGraph'         => $openGraph,
             'twitter'           => $twitter,
             'google'            => $google,
+            'nextPostSlug'        => $nextPostSlug,
+            'previousPostSlug'    => $previousPostSlug,
         ]);
     }
 }
