@@ -46,6 +46,7 @@ use Illuminate\Filesystem\Filesystem;
 
 // Larave facades
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends FrontendBaseController
 {
@@ -197,9 +198,6 @@ class PostController extends FrontendBaseController
         // So, first of all, must be just one category for this post
         $category = $this->repository->findCategoryForPostById($post->id);
 
-        $nextPostSlug     = "";
-        $previousPostSlug = "";
-
         if (count($category) == 1)
         {
             // Next post
@@ -207,9 +205,17 @@ class PostController extends FrontendBaseController
 
             // Previous post
             $previousPostSlug = $this->repository->getPreviousPost($category[0]->category_id, $post->publish_on);
+
+            // The category's title
+            $categoryTitle    = $this->repository->getCategoryTitleById($category[0]->category_id);
         }
 
-        return view('pages/single_post', [
+
+        // tags
+        $tagTitles = $this->repository->getTagTitlesByPostId($post->id);
+
+
+        return view('posts/single_post', [
             'post'              => $post,
             'DatesHelper'       => DatesHelper::class,
             'HTMLHelper'        => HTMLHelper::class,
@@ -217,8 +223,10 @@ class PostController extends FrontendBaseController
             'openGraph'         => $openGraph,
             'twitter'           => $twitter,
             'google'            => $google,
-            'nextPostSlug'        => $nextPostSlug,
-            'previousPostSlug'    => $previousPostSlug,
+            'nextPostSlug'      => $nextPostSlug,
+            'previousPostSlug'  => $previousPostSlug,
+            'categoryTitle'     => $categoryTitle,
+            'tagTitles'         => $tagTitles,
         ]);
     }
 }
