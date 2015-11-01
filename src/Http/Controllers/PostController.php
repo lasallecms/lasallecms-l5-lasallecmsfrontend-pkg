@@ -201,15 +201,14 @@ class PostController extends FrontendBaseController
         if (count($category) == 1)
         {
             // Next post
-            $nextPostSlug     = $this->repository->getNextPost($category[0]->category_id, $post->publish_on);
+            $nextPost     = $this->repository->getNextPost($category[0]->category_id, $post->publish_on);
 
             // Previous post
-            $previousPostSlug = $this->repository->getPreviousPost($category[0]->category_id, $post->publish_on);
+            $previousPost = $this->repository->getPreviousPost($category[0]->category_id, $post->publish_on);
 
             // The category's title
             $categoryTitle    = $this->repository->getCategoryTitleById($category[0]->category_id);
         }
-
 
         // tags
         $tagTitles = $this->repository->getTagTitlesByPostId($post->id);
@@ -223,8 +222,8 @@ class PostController extends FrontendBaseController
             'openGraph'         => $openGraph,
             'twitter'           => $twitter,
             'google'            => $google,
-            'nextPostSlug'      => $nextPostSlug,
-            'previousPostSlug'  => $previousPostSlug,
+            'nextPost'          => $nextPost,
+            'previousPost'  => $previousPost,
             'categoryTitle'     => $categoryTitle,
             'tagTitles'         => $tagTitles,
         ]);
