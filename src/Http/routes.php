@@ -83,16 +83,6 @@ if (config('lasallecmsfrontend.frontend_route_display_posts_by_tag')) {
 }
 
 
-/* -----------------------------------------------------------------------------------------------
-   Route for my contact package's thank you page. Here for convenience only
-   ----------------------------------------------------------------------------------------------- */
-if (config('lasallecmsfrontend.frontend_route_contact_form_thank_you')) {
-    Route::get('contact_form_thank_you', [
-        'as'   => 'contact_form_thank_you',
-        'uses' => 'ContactController@thankyou'
-    ]);
-}
-
 
 /* -----------------------------------------------------------------------------------------------
    In the event "404" is the route!/var/www/html/lasallecms-l5-packages/packages/lasallecms/lasallecmsadmin

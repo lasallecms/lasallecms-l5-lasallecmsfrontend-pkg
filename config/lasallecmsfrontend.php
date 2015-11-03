@@ -28,10 +28,10 @@
  *
  */
 
-/*
-	|--------------------------------------------------------------------------
-	| IMPORTANT: YOUR FRONT END TEMPLATE RESIDES IN YOUR APP, *NOT* IN THIS PKG!
-	|--------------------------------------------------------------------------
+    /*
+    |--------------------------------------------------------------------------
+    | IMPORTANT: YOUR FRONT END TEMPLATE RESIDES IN YOUR APP, *NOT* IN THIS PKG!
+    |--------------------------------------------------------------------------
     |
     | Sure, I put the admin template in my "lasallecmsadmin" package, because who
     | conjures up their own admin template?
@@ -45,12 +45,12 @@
     | ARRAY ELEMENTS IN THE view CONFIGURATION FILE'S "paths" ARRAY. THE FILE IS
     | LOCATED AT "config/view.php" IN YOUR APP (ie, not in a package!).
     |
-*/
+    */
 
-/*
-	|--------------------------------------------------------------------------
-	| IMPORTANT: YOU MUST SET UP THE FRONT-END VIEWS IN YOUR APP IN A SPECIFIC FOLDER STRUCTURE
-	|--------------------------------------------------------------------------
+    /*
+    |--------------------------------------------------------------------------
+    | IMPORTANT: YOU MUST SET UP THE FRONT-END VIEWS IN YOUR APP IN A SPECIFIC FOLDER STRUCTURE
+    |--------------------------------------------------------------------------
     |
     | The views in your app for your front-end must be set-up in this folder structure:
     |
@@ -65,27 +65,27 @@
     | ../lasalle/partials/
     | ../lasalle/errors/
     |
-*/
+    */
 
 
 
 return [
 
-	/*
-	|--------------------------------------------------------------------------
-	| Icon
-	|--------------------------------------------------------------------------
-	|
-	| Path under the public folder, and filename, of the frontend's icon. Please
-	| do not use a "/" as the first character. Example: public/icons/favicon.ico would
-	| 'icons/favicon.ico'.
-	|
-	| Traditional favicon:
-	|  * size: 16x16 or 32x32;
-	|  * transparency is OK.
-	| (http://mky.be/favicon/)
-	|
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Icon
+    |--------------------------------------------------------------------------
+    |
+    | Path under the public folder, and filename, of the frontend's icon. Please
+    | do not use a "/" as the first character. Example: public/icons/favicon.ico would
+    | 'icons/favicon.ico'.
+    |
+    | Traditional favicon:
+    |  * size: 16x16 or 32x32;
+    |  * transparency is OK.
+    | (http://mky.be/favicon/)
+    |
+    */
 
 	'icon' => 'favicon.ico',
 
@@ -152,40 +152,40 @@ return [
 
 
     /*
-	|--------------------------------------------------------------------------
-	| Do not query the database for posts.
-	|--------------------------------------------------------------------------
-	|
-	| You can hand-craft pages in the blade files without using the database at all.
+    |--------------------------------------------------------------------------
+    | Do not query the database for posts.
+    |--------------------------------------------------------------------------
     |
-  	| It is assumed that you will use the database, so the db is queried for posts.
-	|
+    | You can hand-craft pages in the blade files without using the database at all.
+    |
+    | It is assumed that you will use the database, so the db is queried for posts.
+    |
     | Well, if you are hand-crafting your page without using the database, then why
-	| not save some loading time by skipping the database querying?
-	|
-    | For those pages that you are hand-crafting, specify them here to skip the db querying.
-	|
-	| Yes, even the home page is assumed to be using the database. So if you are not
-    | availing your home page to the database, then list "Home" here.
-	|
-	| The category names must be the actual category titles.
+    | not save some loading time by skipping the database querying?
     |
-	*/
+    | For those pages that you are hand-crafting, specify them here to skip the db querying.
+    |
+    | Yes, even the home page is assumed to be using the database. So if you are not
+    | availing your home page to the database, then list "Home" here.
+    |
+    | The category names must be the actual category titles.
+    |
+    */
     'pages_not_using_database' => [
         'Home', 'Team',
     ],
 
 
     /*
-	|--------------------------------------------------------------------------
-	| Number of posts to display on the home page
-	|--------------------------------------------------------------------------
-	|
-	| The number of most-recent publishable posts to display on the home page.
+    |--------------------------------------------------------------------------
+    | Number of posts to display on the home page
+    |--------------------------------------------------------------------------
     |
-  	| If the above "pages_not_using_database" includes "Home", then this setting is moot.
+    | The number of most-recent publishable posts to display on the home page.
     |
-	*/
+    | If the above "pages_not_using_database" includes "Home", then this setting is moot.
+    |
+    */
     'number_of_posts_to_display_on_home_page' => 5,
 
 
@@ -330,7 +330,7 @@ return [
     |--------------------------------------------------------------------------
     | Excluded IP addresses for front end only
     |--------------------------------------------------------------------------
-    |APP_FRONTEND_ROUTE_503
+    |
     | What IP addresses are excluded from looking at the front end? This has nothing to
     | do with logging in! Stress that this pertains to the front end only.
     |
@@ -422,20 +422,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Front-end route: contact page thank you
-    |--------------------------------------------------------------------------
-    |
-    | true  = use the Route for my contact package's thank you page in this package's routes.php
-    |
-    | false = do *not* use the Route for my contact package's thank you page that resides in the front-end package's routes.php
-    |       ==> if set to false, then make sure you have this route in your app's routes.php
-
-    |
-    */
-    'frontend_route_contact_form_thank_you' => true,
-
-    /*
-    |--------------------------------------------------------------------------
     | Front-end route: 404
     |--------------------------------------------------------------------------
     |
@@ -520,29 +506,38 @@ return [
     */
 
     /*
-     * og:description
-     *
-     * A brief description of the content, usually between 2 and 4 sentences. This will
-     * displayed below the title of the post on Facebook.
-     */
+    |--------------------------------------------------------------------------
+    | og:description
+    |--------------------------------------------------------------------------
+    |
+    | A brief description of the content, usually between 2 and 4 sentences. This will
+    | displayed below the title of the post on Facebook.
+    |
+    */
     'og_description' => 'Flagship site of LaSalle Software, based on the superb Laravel Framework for PHP, plus blog. There is a separate Media site with podcasts.',
 
     /*
-     * og:site_name
-     *
-     * The name of your website (such as IMDb, not imdb.com).
-     */
+    |--------------------------------------------------------------------------
+    | og:site_name
+    |--------------------------------------------------------------------------
+    |
+    | The name of your website (such as IMDb, not imdb.com).
+    |
+    */
     'og_site_name' => env('APP_SITE_NAME'),
 
     /*
-     * og:type
-     *
-     * The type of media of your content. This tag impacts how your content shows up in News Feed.
-     * If you don't specify a type,the default is website. Each URL should be a single object, so multiple
-     * og:type values are not possible. Find the full list of object types in our Object Types Reference
-     *
-     * https://developers.facebook.com/docs/reference/opengraph#object-type
-     */
+    |--------------------------------------------------------------------------
+    | og:type
+    |--------------------------------------------------------------------------
+    |
+    | The type of media of your content. This tag impacts how your content shows up in News Feed.
+    | If you don't specify a type,the default is website. Each URL should be a single object, so multiple
+    | og:type values are not possible. Find the full list of object types in our Object Types Reference
+    |
+    | https://developers.facebook.com/docs/reference/opengraph#object-type
+    |
+    */
     'og_type' => 'article',
 
 
