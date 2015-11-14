@@ -62,6 +62,8 @@ if (config('lasallecmsfrontend.frontend_route_home')) {
         'as'   => 'home',
         'uses' => '\Lasallecms\Lasallecmsfrontend\Http\Controllers\PostController@home',
     ]);
+
+    $router->get('home', '\Lasallecms\Lasallecmsfrontend\Http\Controllers\PostController@home');
 }
 
 
