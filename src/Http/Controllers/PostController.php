@@ -116,7 +116,21 @@ class PostController extends FrontendBaseController
         }
 
         // Get the posts to display on the home page
-        $posts = $this->repository->getSomePublishablePosts(Config::get('lasallecmsfrontend.number_of_posts_to_display_on_home_page'));
+        $getSomePublishablePosts = $this->repository->getSomePublishablePosts(Config::get('lasallecmsfrontend.number_of_posts_to_display_on_home_page'));
+
+
+
+        // Some categories may not want their posts displayed on the home page. Suppress such posts.
+        $posts = [];
+        foreach ($getSomePublishablePosts as $post)
+        {
+            $suppressPostFromHomePage = $this->suppressPostFromHomePage($post);
+
+            if (!$suppressPostFromHomePage) {
+                $posts[] = $post;
+            }
+        }
+
 
         // Is the featured image in each post resized?
         $this->checkPostsImagesResized($posts);
@@ -227,5 +241,32 @@ class PostController extends FrontendBaseController
             'categoryTitle'     => $categoryTitle,
             'tagTitles'         => $tagTitles,
         ]);
+    }
+
+
+    /**
+     * Should this post be suppressed on the home, based on the categories
+     * the post is associated?
+     *
+     * @param   $post
+     * @return  bool
+     */
+    private function suppressPostFromHomePage($post)
+    {
+        $categoriesToSuppress = Config::get('lasallecmsfrontend.frontend_suppress_categories_on_home_page');
+
+        if (empty($categoriesToSuppress)) return false;
+
+        // find the categories associated with the post
+        $categories     = $this->repository->findCategoryForPostById($post->id);
+
+        foreach ($categories as $category)
+        {
+            $categoryName = $this->repository->getCategoryTitleById($category->category_id);
+
+            if (in_array($categoryName, $categoriesToSuppress)) return true;
+        }
+
+        return false;
     }
 }

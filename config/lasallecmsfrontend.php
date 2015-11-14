@@ -359,6 +359,20 @@ return [
     'frontend_display_flash_page' => env('APP_FRONTEND_DISPLAY_FLASH_PAGE'),
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Do not display posts belonging to these categories on the home page.
+    |--------------------------------------------------------------------------
+    |
+    | Do you have categories whose posts should not display on the home page?
+    |
+    | List the Category names (titles) in an array.
+    |
+    */
+    //'frontend_suppress_categories_on_home_page' => ['Landing-Pages'],
+    'frontend_suppress_categories_on_home_page' => [],
+
+
 
     /*
     |===============================================================================================
