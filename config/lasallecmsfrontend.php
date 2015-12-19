@@ -191,6 +191,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Acceptable image file types (extensions) for uploading
+    |--------------------------------------------------------------------------
+    |
+    | What image types are ok for uploading.
+    |
+    | For, but not exclusively for, uploading featured images
+    |
+    | Three character extensions only.
+    |
+    | Lowercase only!
+    |
+    */
+    'acceptable_image_extensions_for_uploading' => [
+        'bmp', 'gif', 'jpg', 'png',
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Uploaded images path
     |--------------------------------------------------------------------------
     |
