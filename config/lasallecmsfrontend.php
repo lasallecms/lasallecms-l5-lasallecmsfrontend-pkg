@@ -329,6 +329,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Frontend Template Folder
+    |--------------------------------------------------------------------------
+    |
+    | What is the name of your frontend template? 
+    | That is, where is your frontend folder.
+    |
+    | Your lasallecmsfrontend views are located at:
+    |
+    | resources/views/vendor/lasallecmsfrontend/frontend/frontend_template_name/
+    |
+    */
+    'frontend_template_name' => 'default',
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Allowed IP addresses for front end only
     |--------------------------------------------------------------------------
     |
