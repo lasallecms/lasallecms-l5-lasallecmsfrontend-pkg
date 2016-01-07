@@ -329,6 +329,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Do not display posts belonging to these categories on the home page.
+    |--------------------------------------------------------------------------
+    |
+    | Do you have categories whose posts should not display on the home page?
+    |
+    | List the Category names (titles) in an array.
+    |
+    */
+    //'frontend_suppress_categories_on_home_page' => ['Landing-Pages'],
+    'frontend_suppress_categories_on_home_page' => [],
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Frontend Template Folder
     |--------------------------------------------------------------------------
     |
@@ -342,6 +356,14 @@ return [
     */
     'frontend_template_name' => 'default',
 
+
+
+    /*
+    |===============================================================================================
+    |                           ***  START: FRONTEND SECURITY  ***
+    |===============================================================================================
+    |
+    */
 
     /*
     |--------------------------------------------------------------------------
@@ -383,29 +405,33 @@ return [
     | Front end is down / display flash page
     |--------------------------------------------------------------------------
     |
-    | Do not allow anyone to look at the front end. Instead, redirect everyone
-    | to a splash page.
+    | Do not allow guests to see front-end. Only logged in users can see front-end.
     |
-    | Exception: anyone logged into the admin is allowed to view the front end.
+    | true  = do not allow guests to see the front-end
     |
-    | true or false.
+    | false = allow guests to see the front-end
     |
     */
     'frontend_display_flash_page' => env('APP_FRONTEND_DISPLAY_FLASH_PAGE'),
 
-
     /*
     |--------------------------------------------------------------------------
-    | Do not display posts belonging to these categories on the home page.
+    | Front end is down / display flash page view location
     |--------------------------------------------------------------------------
     |
-    | Do you have categories whose posts should not display on the home page?
+    | Where is the flash page?
     |
-    | List the Category names (titles) in an array.
+    | Leave blank to use lasallecmsfrontend::splash_page
     |
     */
-    //'frontend_suppress_categories_on_home_page' => ['Landing-Pages'],
-    'frontend_suppress_categories_on_home_page' => [],
+    'frontend_flash_page_location' => '',
+
+    /*
+    |===============================================================================================
+    |                           ***  END: FRONTEND SECURITY  ***
+    |===============================================================================================
+    |
+    */
 
 
 

@@ -37,7 +37,8 @@ use Illuminate\Support\ServiceProvider;
  *
  * @author Bob Bloom <info@southlasalle.com>
  */
-class LasallecmsfrontendServiceProvider extends ServiceProvider {
+class LasallecmsfrontendServiceProvider extends ServiceProvider
+{
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -60,7 +61,7 @@ class LasallecmsfrontendServiceProvider extends ServiceProvider {
 
         //$this->setupTranslations();
 
-        //$this->setupViews();
+        $this->setupViews();
     }
 
     /**

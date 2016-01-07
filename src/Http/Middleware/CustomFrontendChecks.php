@@ -84,6 +84,22 @@ class CustomFrontendChecks
         }
 
 
+        // Allow logged in users to see front-end
+        if (config('lasallecmsfrontend.frontend_display_flash_page')) {
+
+            // if guest, then view the splash page
+            if (!Auth::check()) {
+
+                if (config('lasallecmsfrontend.frontend_flash_page_location') == "") {
+                    return view('lasallecmsfrontend::splash_page.splash_page');
+                } else {
+                    return view(config('lasallecmsfrontend.frontend_flash_page_location'));
+                }
+
+            }
+        }
+
+        /*
         if (!Auth::check())
         {
             // Front end is down. Display flash page. Anyone logged into the admin is exempt
@@ -92,6 +108,7 @@ class CustomFrontendChecks
                 return view('special_pages.splash_page');
             }
         }
+        */
 
         return $next($request);
     }
