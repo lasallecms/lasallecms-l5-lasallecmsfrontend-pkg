@@ -88,7 +88,7 @@ class CustomFrontendChecks
         if (config('lasallecmsfrontend.frontend_display_flash_page')) {
 
             // if guest, then view the splash page
-            if (!Auth::check()) {
+            if ( (!Auth::check()) && (!$request->is('login')) ) {
 
                 if (config('lasallecmsfrontend.frontend_flash_page_location') == "") {
                     return view('lasallecmsfrontend::splash_page.splash_page');
