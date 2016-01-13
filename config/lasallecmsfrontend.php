@@ -555,6 +555,24 @@ return [
     */
     'frontend_route_site_map' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Front-end redirect upon successful front-end login
+    |--------------------------------------------------------------------------
+    |
+    | Where do you want users to go when they have successfully logged into the front-end?
+    |
+    | If the "redirectPath' property exists, then will use this first.
+    | If the "redirectTo"   property exists, then will use this.
+    |
+    | If this config is not blank, then will use this config setting.
+    | If still no path specified, then will use "/home".
+    |
+    | In lasallecms\helpers\TwoFactorAuth\TwoFactorAuthHelper::redirectPathUponSuccessfulFrontendLogin()
+    |
+    */
+    'frontend_redirect_to_this_view_when_user_successfully_logged_in_to_front_end' => '/home',
+
 
 
 
