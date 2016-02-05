@@ -92,7 +92,7 @@ if (config('lasallecmsfrontend.frontend_route_display_posts_by_tag')) {
 if (config('lasallecmsfrontend.frontend_route_404')) {
     $router->get('404', [
         'as'   => '404',
-        'uses' => 'FrontendController@fourohfour',
+        'uses' => 'FrontendBaseController@fourohfour',
 
     ]);
 }
@@ -103,7 +103,7 @@ if (config('lasallecmsfrontend.frontend_route_404')) {
 if (config('lasallecmsfrontend.frontend_route_503')) {
     $router->get('503', [
         'as'   => '503',
-        'uses' => 'FrontendController@fiveohthree',
+        'uses' => 'FrontendBaseController@fiveohthree',
 
     ]);
 }
