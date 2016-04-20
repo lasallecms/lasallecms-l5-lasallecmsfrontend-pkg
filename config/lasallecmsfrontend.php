@@ -76,9 +76,7 @@ return [
     | Icon
     |--------------------------------------------------------------------------
     |
-    | Path under the public folder, and filename, of the frontend's icon. Please
-    | do not use a "/" as the first character. Example: public/icons/favicon.ico would
-    | 'icons/favicon.ico'.
+    | Path under the public folder, and filename, of the frontend's icon. 
     |
     | Traditional favicon:
     |  * size: 16x16 or 32x32;
@@ -86,8 +84,7 @@ return [
     | (http://mky.be/favicon/)
     |
     */
-
-	'icon' => 'favicon.ico',
+    'icon' => 'favicon.ico',
 
 
     /*
@@ -222,6 +219,7 @@ return [
     */
     'images_folder_uploaded' => 'images',
 
+
     /*
     |--------------------------------------------------------------------------
     | Resizsed images path
@@ -286,6 +284,7 @@ return [
     |
     */
     'category_featured_image_size' => [ 1900 => 400 ],
+
 
     /*
     |--------------------------------------------------------------------------
