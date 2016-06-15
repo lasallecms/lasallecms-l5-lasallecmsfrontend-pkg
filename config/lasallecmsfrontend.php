@@ -28,44 +28,44 @@
  *
  */
 
-    /*
-    |--------------------------------------------------------------------------
-    | IMPORTANT: YOUR FRONT END TEMPLATE RESIDES IN YOUR APP, *NOT* IN THIS PKG!
-    |--------------------------------------------------------------------------
-    |
-    | Sure, I put the admin template in my "lasallecmsadmin" package, because who
-    | conjures up their own admin template?
-    |
-    | OTOH, everyone has their own unique frontend template. So I assume your
-    | frontend template resides in your app.
-    |
-    | ======>   **** SO YOU NEED TO DO SOMETHING VERY IMPORTANT ****    <=========
-    |
-    | YOU NEED TO MAKE SURE THAT THE PATH TO THE FRONT END TEMPLATE IS ONE OF THE
-    | ARRAY ELEMENTS IN THE view CONFIGURATION FILE'S "paths" ARRAY. THE FILE IS
-    | LOCATED AT "config/view.php" IN YOUR APP (ie, not in a package!).
-    |
-    */
+/*
+|--------------------------------------------------------------------------
+| IMPORTANT: YOUR FRONT END TEMPLATE RESIDES IN YOUR APP, *NOT* IN THIS PKG!
+|--------------------------------------------------------------------------
+|
+| Sure, I put the admin template in my "lasallecmsadmin" package, because who
+| conjures up their own admin template?
+|
+| OTOH, everyone has their own unique frontend template. So I assume your
+| frontend template resides in your app.
+|
+| ======>   **** SO YOU NEED TO DO SOMETHING VERY IMPORTANT ****    <=========
+|
+| YOU NEED TO MAKE SURE THAT THE PATH TO THE FRONT END TEMPLATE IS ONE OF THE
+| ARRAY ELEMENTS IN THE view CONFIGURATION FILE'S "paths" ARRAY. THE FILE IS
+| LOCATED AT "config/view.php" IN YOUR APP (ie, not in a package!).
+|
+*/
 
-    /*
-    |--------------------------------------------------------------------------
-    | IMPORTANT: YOU MUST SET UP THE FRONT-END VIEWS IN YOUR APP IN A SPECIFIC FOLDER STRUCTURE
-    |--------------------------------------------------------------------------
-    |
-    | The views in your app for your front-end must be set-up in this folder structure:
-    |
-    | "Root folder" = base_path().'/resource/views/'.Template_Name
-    |
-    | Using the default template name "lasalle", subfolders:
-    |
-    | ../lasalle/pages/about.blade.php
-    |                  home.blade.php
-    |                  team.blade.php
-    | ../lasalle/layouts/
-    | ../lasalle/partials/
-    | ../lasalle/errors/
-    |
-    */
+/*
+|--------------------------------------------------------------------------
+| IMPORTANT: YOU MUST SET UP THE FRONT-END VIEWS IN YOUR APP IN A SPECIFIC FOLDER STRUCTURE
+|--------------------------------------------------------------------------
+|
+| The views in your app for your front-end must be set-up in this folder structure:
+|
+| "Root folder" = base_path().'/resource/views/'.Template_Name
+|
+| Using the default template name "lasalle", subfolders:
+|
+| ../lasalle/pages/about.blade.php
+|                  home.blade.php
+|                  team.blade.php
+| ../lasalle/layouts/
+| ../lasalle/partials/
+| ../lasalle/errors/
+|
+*/
 
 
 
@@ -203,6 +203,37 @@ return [
     'acceptable_image_extensions_for_uploading' => [
         'bmp', 'gif', 'jpg', 'png',
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Upload parent folder
+    |--------------------------------------------------------------------------
+    |
+    | What is the parent folder of the user upload sub-folder?
+    |
+    | Generally, the upload folder resides in the "public" folder. However, Envoyer.io
+    | wants the parent folder to be "storage", ***with the "public" user uploads folder symlinking to it***.
+    |
+    | Used in the Helpers package:
+    | * Lasallecms\Helpers\Images\ImagesHelper::pathOfImagesResizedFolder()
+    | * Lasallecms\Helpers\Images\ImagesHelper::pathOfImagesUploadFolder()
+    | * Lasallecms\Helpers\Images\ImagesHelper::pathOfImagesUploadParentFolder
+    |
+    | See https://github.com/lasallecms/lasallecms-l5-lasallecmsfrontend-pkg/issues/24
+    |
+    | Usually, either 'storage' or 'public'
+    |
+    | This setting also affects lasallecmsemail.attachment_path
+    |
+    | Your local dev site should have the same folder structure as your production site -- so goes my thinking
+    | right now. You set up the symlink in Envoyer itself ("Manager Linked Folders"). However, you have to manually
+    | set the symlink in your local site. Example symlink command:
+    |
+    | ln -s /var/www/html/project/storage/uploads/ /var/www/html/project/public/uploads
+    |
+    */
+    'images_parent_folder_uploaded' => 'storage',
 
 
     /*
