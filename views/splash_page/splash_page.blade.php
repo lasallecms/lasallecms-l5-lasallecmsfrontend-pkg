@@ -86,9 +86,13 @@
 
 				<br />
 
-					Site not available at this time.
+					The {{{ Config::get('lasallecmsfrontend.site_name') }}} site is not available at this time.
 
                 <br /><br />
+
+					Registered users can <a href="{{{ Config::get('app.url') }}}/login">log in</a>.
+
+				<br /><br />
 
 
 			</div>
